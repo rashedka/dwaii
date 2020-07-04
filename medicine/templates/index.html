@@ -1,0 +1,118 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dwaii</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'medicine/css/style.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="navbar navbar-dark shadow-sm navbar-expand-md" style="background-color: #efefef;">
+            <div class="container d-flex justify-content-between">
+                {% if request.user.is_authenticated %}
+                <span class="d-md-none"><span style="padding-left: 5px;">منور</span><a
+                        href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
+                {% endif %}
+                <div class="col-md-4 col text-center d-md-none">
+                    <div class="ml-auto mr-auto ">
+                        <a href="{% url 'index' %}">
+                            <img src="{% static 'medicine/img/logo.png'%} " alt="" class="" style="height: 50px;">
+                            <span class="logo-text">دوائي</span>
+                        </a>
+                    </div>
+                </div>
+                <button type="button" class="navbar-toggler" style="background-color: #313131e6;" data-toggle="collapse"
+                    data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse col-md-4" id="navbarCollapse">
+                    <div class="navbar-nav">
+                        <a href="{% url 'allMedicine' %}">قائمة الأدوية</a>
+                    </div>
+                </div>
+                <div class="col-md-4 col text-center d-none d-md-block">
+                    <div class="ml-auto mr-auto ">
+                        <a href="{% url 'index' %}">
+                            <img src="{% static 'medicine/img/logo.png'%} " alt="" class="" style="height: 44px;">
+                            <span class="logo-text">دوائي</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="collapse navbar-collapse col-md-4" id="navbarCollapse" style="flex-direction: row-reverse;">
+                    <div class="navbar-nav">
+                        {% if request.user.is_authenticated %}
+                        <span class="d-none d-md-block"> <span> منور </span> <a href="{% url 'profile' %}">
+                                {{request.user.first_name}}</a></span>
+                        <a href="{% url 'logout' %}">تسجيل خروج</a>
+                        {% else %}
+                        <a href="{% url 'sign' %}">دخول / تسجيل صيدلية</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page">
+
+        {% block content %}
+        <main class="slider">
+            <div class="container">
+                <div class="p-sm-2">
+                    <h4 style="margin-bottom: 25px;"> يمكنك البحث عن الدواء الذي تحتاجه من هنا </h4>
+                    <!-- Search form -->
+                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0"
+                        action="{% url 'search' %}" method="GET">
+                        <input class="form-control form-control-sm ml-3 col-md-12 col-sm-12 search-bar" type="text"
+                            placeholder="أدخل إسم الدواء" aria-label="Search" name="search">
+                        <input class="btn btn-primary" type="submit" value="بحث" style="margin-top: 15px;">
+
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        {% endblock  %}
+        <!-- Footer -->
+
+
+        <footer class="page-footer font-small blue">
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">جميع الحقوق محغوظة
+                <a href="telto:966536262443" style="color: #4fb6ff">Kwemrj</a>
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+        <!-- Footer -->
+    </div>
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

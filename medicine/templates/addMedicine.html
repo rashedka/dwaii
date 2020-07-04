@@ -1,0 +1,23 @@
+{% extends 'index.html'%}
+{% block content %}
+
+        <section>
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="p-5">
+                        <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                            <form name="form" style=" text-align: center;" method="POST" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                        {{form.as_p}}
+                                {{msg}}
+                                <div class="checkbox mb-3">
+                                </div>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit" >إضافة</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
