@@ -15,7 +15,7 @@ class user_info(models.Model):
     img = models.ImageField(upload_to="profile/", default="profile/profile.png", null=True, blank=True)
 
     def __str__(self):
-        return self.username.username
+        return "المستخدم : {}, الصيدلية {}".format(self.username.username, self.pharmacyName)
 
 
 class medicine(models.Model):
