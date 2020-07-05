@@ -28,9 +28,14 @@ def index(request):
 def search(request):
     searchword = request.GET['search']
     searchresult = storage.objects.filter(medicine__generalName__icontains=searchword, is_Available=True).order_by('-updateDate').all()
+    if searchresult.exists():
+        msg = ""
+    else :
+        msg = "الدواء غير موجود"
     context = {
         'searchValue': searchword,
         's': searchresult,
+        'msg': msg,
     }
     return render(request, 'search.html', context)
 
