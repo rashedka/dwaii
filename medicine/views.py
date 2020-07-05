@@ -14,12 +14,19 @@ from .form import medicineForm
 
 
 def index(request):
-    if AnonymousUser.is_authenticated:
-        context = {
+    user_infos = user_info.objects.all().count() - 3
+    medicines = medicine.objects.all().count()
+    quantity = storage.objects.all().count()
+    context = {
+        'user_info': user_infos,
+        'medicine' : medicines,
+        'quantity' : quantity,
         }
+    if AnonymousUser.is_authenticated:
+        pass
     else :
         users = user_info.objects.get(username=request.user)
-        context = {
+        context += {
             'user': users
         }
     return render(request, 'index.html', context)
