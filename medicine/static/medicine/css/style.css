@@ -1,0 +1,187 @@
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none!important;
+}
+
+body {
+    font-family: 'El Messiri', Arial, Helvetica, sans-serif;
+    text-align: center;
+    background: url(../img/3429626.jpg) no-repeat center center fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+header {
+    max-height: 80px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: #ddddddc7;
+}
+
+.unorder-list {
+    list-style: none;
+    float: right;
+    margin-bottom: 0;
+
+}
+
+.unorder-list li {
+    float: right;
+    display: block;
+    margin: 0 5px;
+}
+
+.navbar .unorder-list li a {
+    margin-top: 15px;
+    padding: 20px 10px;
+    color: #000;
+    font-weight: 500;
+}
+
+
+.navbar .navbar-nav a {
+    padding: 10px 10px;
+    color: #000;
+    font-weight: 500;
+}
+
+.navbar .navbar-nav a:hover {
+    color: #235461db;
+}
+
+.navbar .navbar-nav span {
+    padding: 10px 0;
+}
+
+.navbar .unorder-list li a:hover {
+    border-bottom: 3px solid #164A57;
+}
+
+.page {
+    margin-top: 60px;
+}
+
+main {
+    height: 670px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+
+footer {
+    background-color: #03322e;
+    color: #c9c9c9;
+}
+
+.search-bar {
+    border: 0;
+    border-bottom: 1px solid;
+    background-color: #ffffffeb;
+}
+
+.logo-text {
+    font-size: 25px;
+    margin-right: 10px;
+    color: #f31a1a;
+}
+
+.medicine-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.provider-medicine, .signin-signup, .profile, .listofstorage, .productinfo {
+    background: #fffffff2;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.signin-signup, .profile {
+    border-radius: 10px;
+    height: fit-content;
+    margin: auto;
+}
+
+a {
+    color: #2b2b2b ;
+}
+
+.bu {
+    background-color: #d2d2d2;
+    padding: 5px;
+    border: 2px solid #b5b5b5c4;
+}
+
+.image {
+    height: 200px;
+}
+
+.profile {
+    width: 100%;
+}
+
+.profile .image img {
+    height: 200px;
+    width: 100%;
+}
+
+.productinfo .image {
+    height: fit-content;
+    width: fit-content;
+}
+
+.productinfo .image img {
+    height: 300px;
+    width: 300px;
+}
+
+.medicine-short-detail {
+    border-left: 1px solid #0000003b;
+}
+
+.form-control {
+    margin-top: 15px;
+}
+
+section {
+    min-height: 670px;
+}
+
+.cus {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.cus .form-control {
+    margin-left: 15px;
+}
+
+.socialMedia ul li {
+    margin-left: 10px;
+}
+
+.Analytics {
+    width: 100%;
+    background-color: lawngreen;
+    border-radius: 10px;
+}
+
+.Analytics .Analyticshaeder{
+    font-size: 24px;
+    padding-bottom: 10px;
+}
