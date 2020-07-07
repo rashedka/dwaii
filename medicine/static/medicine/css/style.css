@@ -69,7 +69,7 @@ header {
 }
 
 main {
-    height: 670px !important;
+    min-height: 670px !important;
     display: flex;
     justify-content: center;
     align-items: center;

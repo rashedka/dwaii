@@ -11,6 +11,8 @@ from . import form
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users
 from .form import medicineForm
+from django.db.models import Q
+
 
 
 def index(request):
@@ -34,7 +36,7 @@ def index(request):
 
 def search(request):
     searchword = request.GET['search']
-    searchresult = storage.objects.filter(medicine__generalName__icontains=searchword, is_Available=True).order_by('-updateDate').all()
+    searchresult = storage.objects.filter(Q(medicine__generalName__icontains=searchword) | Q(medicine__scientificName__icontains = searchword), is_Available=True).order_by('-updateDate').all()
     if searchresult.exists():
         msg = ""
     else :

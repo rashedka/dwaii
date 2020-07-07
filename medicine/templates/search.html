@@ -29,14 +29,10 @@
                             </div>
                             <div class="col-md-9 text-right">
                                 <h4>{{u.medicine.generalName}}</h4>
+                                <h6>{{u.medicine.scientificName}}</h6>
                                 <h6><span>{{u.username.user_info.pharmacyName}}</span></h6>
                                 <h6><span>التركيز :</span>{{u.dose}}</h6>
                                 <h6><span style="color:#0d0">{{u.updateDate | naturalday}}</span></h6>
-                                {% if u.quantity > 1 %}
-                                <h6><span>الكمية المتوفرة</span> : {{u.quantity}}</h6>
-                                {% elif u.quantity == 0 %}
-                                <h6><span>انتهت الكمية في هذه الصيدلية</span></h6>
-                                {% endif %}
                                 <h6><span>السعر : </span>{{u.price}} <span> جنيه </span></h6>
                                 <h6><span>الموقع :</span><span>{{u.username.user_info.city}}, {{u.username.user_info.location}}</span></h6>
 
