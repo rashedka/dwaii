@@ -36,7 +36,7 @@ def index(request):
 
 def search(request):
     searchword = request.GET['search']
-    searchresult = storage.objects.filter(Q(medicine__generalName__icontains=searchword) | Q(medicine__scientificName__icontains = searchword), is_Available=True).order_by('-updateDate').all()
+    searchresult = storage.objects.filter(Q(medicine__generalName__icontains=searchword) | Q(medicine__scientificName__icontains = searchword), is_Available=True).order_by('medicine__generalName','-updateDate').all()
     if searchresult.exists():
         msg = ""
     else :
@@ -248,6 +248,16 @@ def add_to_storage_backend(request):
         medicine_storage.save()
         return redirect('profile')
 
+@allowed_users('admin')
 def adminDash(request):
-
-    return render(request, 'adminDashboard.html')
+    medicines = medicine.objects.all()
+    user_infos = user_info.objects.all().count() - 3
+    medicinesc = medicine.objects.all().count()
+    quantity = storage.objects.all().count()
+    context = {
+        'medicine': medicines,
+        'medicinec': medicinesc,
+        'quantity': quantity,
+        'user_info': user_infos,
+    }
+    return render(request, 'adminDashboard.html', context)

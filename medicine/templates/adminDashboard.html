@@ -4,36 +4,62 @@
 <section>
     <div class="container" style="background-color: white;">
         <div class="p-5">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row pt-4" style="justify-content: space-between;">
+                <div class="col-md-4 p-2">
                     <div class="p-3 Analytics">
                         <div class="Analyticshaeder">
-                            <span>عدد الصيدليات</span>
+                            <span>عدد الصيدليات المشاركة</span>
                         </div>
                         <div class="Analyticsnumbers">
-                            <span>50</span>
+                            <span>{{user_info}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 p-2">
                     <div class="p-3 Analytics">
                         <div class="Analyticshaeder">
-                            <span>عدد الأدوية المضافة</span>
+                            <span>أصناف الأدوية المضافة</span>
                         </div>
                         <div class="Analyticsnumbers">
-                            <span>10</span>
+                            <span>{{medicinec}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 p-2">
                     <div class="p-3 Analytics">
                         <div class="Analyticshaeder">
-                            <span>كمية الادوية</span>
+                            <span>إجمالي الأدوية المضافة</span>
                         </div>
                         <div class="Analyticsnumbers">
-                            <span>52</span>
+                            <span>{{quantity}}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="pt-4">
+            <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                <h3 class="pt-3 pb-3"> الآدوية المتوفرة في الصيدلية</h3>
+                <div class="table-responsive">
+                    <h4 class="bu"><a style="color: #000 !important" href="{% url 'add_to_storage' %}">إضافة دواء الى الصيدلية</a></h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">إسم الدواء</th>
+                                <th scope="col">الإسم العلمي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for med in medicine %}
+                            <tr>
+                                <th scope="row">{{med.id}}</th>
+                                <td>{{med.generalName}}</td>
+                                <td>{{med.scientificName}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
