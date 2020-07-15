@@ -16,12 +16,18 @@
                                 <h6><span>طرق التواصل</span></h6>
                                 <div class="socialMedia text-center">
                                     <ul class="unorder-list">
+                                        {% if user.phone_number != null%}
                                         <li><a href="telto:{{user.phone_number}}" style="color:black"><i style="font-size:34px"
                                                     class="fa">&#xf095;</i></a></li>
-                                        <li><a href="https://wa.me/{{user.phone_number}}" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
+                                        {% endif %}
+                                        {% if user.whatsappNumber != null%}
+                                        <li><a href="https://wa.me/{{user.whatsappNumber}}" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
                                                     class="fa">&#xf232;</i></a></li>
+                                        {% endif %}
+                                        {% if user.facebookPage != null%}
                                         <li><a href="{{user.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
                                                 class="fa">&#xf082;</i></a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>

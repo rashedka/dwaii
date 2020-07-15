@@ -16,8 +16,9 @@
                                 </div>
                             </div>
                             <div class="col-md text-right detail  mb-auto mt-auto">
-                                <h2 class="mb-4" style="text-transform: capitalize;">{{medicine.medicine.generalName}}
+                                <h2 class="mb-2" style="text-transform: capitalize;">{{medicine.medicine.generalName}}
                                 </h2>
+                                <h3 style="text-transform: capitalize;">{{medicine.medicine.scientificName}}</h3>
                                 <h6><span>صيدلية : </span>{{info.pharmacyName}}</h6>
                                 <h6><span>أخر تحديث </span><span>:
                                         {{medicine.updateDate | naturalday}}</span></h6>
@@ -30,14 +31,22 @@
                                 <h6><span>الموقع : </span><span>{{info.city}}, {{info.location}}</span></h6>
                                 <h6>وسائل التواصل</h6>
                                 <ul class="unorder-list" style="margin-top: auto;">
+                                    {% if info.phone_number != null%}
                                     <li><a href="telto:{{info.phone_number}}" style="color:black"><i
                                                 style="font-size:34px" class="fa">&#xf095;</i></a></li>
-                                    <li><a href="https://wa.me/{{info.phone_number}}"
+                                    {% endif %}
+
+                                    {% if info.whatsappNumber != null%}
+                                    <li><a href="https://wa.me/{{info.whatsappNumber}}"
                                             style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
                                                 class="fa">&#xf232;</i></a></li>
-                                    <li><a href="{{info.facebookPage}}"
-                                            style="color:#26e; "><i style="font-size:34px"
+                                    {% endif %}
+
+                                    {% if info.facebookPage != null%}
+                                    <li><a href="{{info.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
                                                 class="fa">&#xf082;</i></a></li>
+                                    {% endif %}
+
                                 </ul>
                             </div>
                         </div>

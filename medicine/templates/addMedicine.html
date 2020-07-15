@@ -5,14 +5,20 @@
             <div class="container">
                 <div class="col-md-12">
                     <div class="p-5">
-                        <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                            <form name="form" style=" text-align: center;" method="POST" action="" enctype="multipart/form-data">
+                        <div class="profile col-md-12 text-right medicine-short-detail ml-auto mr-auto">
+                            {{msg}}
+                            <form name="form" style="text-align: right;" method="POST" action="" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                        {{form.as_p}}
-                                {{msg}}
+                                {%for field in form%}
+                                    {{field.label}}
+                                    {{field}}
+                                {%endfor%}                                
                                 <div class="checkbox mb-3">
                                 </div>
-                                <button class="btn btn-lg btn-primary btn-block" type="submit" >إضافة</button>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                <button class="btn btn-lg btn-primary btn-block col-md-8 col-11" type="submit" >إضافة</button>
+                                <h5 class="col-md-4"><a href="{% url 'add_to_storage'%}" style="color: #121269;">الرجوع الى صفحة إضافة الادوية</a></h5>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -6,7 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="موقع يساعد المرضى على الوصول الى معرفة أماكن توفر الأدوية بصورة أسرع من خلال البحث عن الدواء في محرك البحث الخاص بالموقع">
+    <meta name="keywords" content="أدوية، البحث عن دواء، متوفر وين، أدوية السودان، السودان، دوائي، وين القى">
+    <meta name="email" content="dwaiisudan@gmail.com">
     <title>Dwaii</title>
+    <link rel="canonical" href="https://www.dwaiisudan.com">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'medicine/css/style.css'%}">
@@ -71,13 +76,14 @@
         <main class="slider">
             <div class="container">
                 <div class="p-sm-2">
-                    
+
                     <h4 style="margin-bottom: 25px; margin-top: 100px;"> يمكنك البحث عن الدواء الذي تحتاجه من هنا </h4>
                     <!-- Search form -->
                     <form class="form-inline d-flex justify-content-center md-form form-sm mt-0"
                         action="{% url 'search' %}" method="GET">
                         <input class="form-control form-control-sm ml-3 col-md-12 col-sm-12 search-bar" type="text"
-                            placeholder="أدخل إسم الدواء (العلمي أو التجاري) باللغة الإنجليزية" aria-label="Search" name="search">
+                            placeholder="أدخل إسم الدواء (العلمي أو التجاري) باللغة الإنجليزية" aria-label="Search"
+                            name="search">
                         <input class="btn btn-primary" type="submit" value="بحث" style="margin-top: 15px;">
 
                     </form>

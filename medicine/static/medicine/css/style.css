@@ -6,12 +6,15 @@ a {
     text-decoration: none!important;
 }
 
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     font-family: 'El Messiri', Arial, Helvetica, sans-serif;
     text-align: center;
-    background: url(../img/3429626.jpg) no-repeat center center fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-color: #52b7ff21;
 }
 
 header {
@@ -79,6 +82,9 @@ main {
 footer {
     background-color: #03322e;
     color: #c9c9c9;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .search-bar {
@@ -161,6 +167,7 @@ img{
 
 section {
     min-height: 670px;
+    margin-bottom: 40px;
 }
 
 .cus {

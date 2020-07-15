@@ -20,12 +20,10 @@ from medicine.views import index, adminDash
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('adminDashboard', adminDash, name='adminDash'),
-    path('medicine/', include('medicine.urls'))
-
+    path('medicine/', include('medicine.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
