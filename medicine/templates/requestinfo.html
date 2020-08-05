@@ -9,13 +9,12 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="image">
-                                    <img src="{{medicine.medicine.img.url}}" alt="noooo" height="200" width="200">
+                                    <img src="{{medicine.img.url}}" alt="noooo" height="200" width="200">
                                 </div>
                             </div>
                             <div class="col-md text-right detail  mb-auto mt-auto">
-                                <h2 class="mb-2" style="text-transform: capitalize;">{{medicine.medicine.generalName}}
+                                <h2 class="mb-2" style="text-transform: capitalize;">{{medicine.medicineGeneral}}
                                 </h2>
-                                <h3 style="text-transform: capitalize;">{{medicine.medicine.scientificName}}</h3>
                                 <a href="{% url 'visitProfile' medicine.username.id %}">
                                     {% if info.accType == 'ph' %}
                                     {% if 'صيدلية' in info.pharmacyName or 'صيدليه' in info.pharmacyName %}
@@ -26,16 +25,10 @@
                                     <h6><span>مبادرة : </span>{{info.pharmacyName}}</h6>
                                     {% else %}
                                     <h6>{{info.username.first_name}} {{info.username.last_name}}</h6>
-                                 {% endif %}</a>
-                                <h6><span>أخر تحديث </span><span>:
-                                        {{medicine.updateDate | naturalday}}</span></h6>
-                                <h6><span>السعر : </span>{{medicine.price}} <span> جنيه </span></h6>
-                                {% if medicine.is_Available %}
-                                <h6><span style="color: #29BF12;">الدواء متوفر</span></h6>
-                                {% elif not medicine.is_Available %}
-                                <h6><span style="color: #BF211E;">نفذت الكمية</span></h6>
-                                {% endif %}
-                                <h6><span>الموقع : </span><span>{% for info in location %}{{info.city}},
+                                {% endif %}</a>
+                                <h6><span>تاريخ الطلب</span><span>:
+                                        {{medicine.requestDate | naturalday}}</span></h6>
+                                <h6><span>الموقع : </span><span> <br>{% for info in location %} <i class="fas fa-map-marker-alt"></i> {{info.city}},
                                         {{info.location}} <br> {% endfor %}</span></h6>
                                 <h6>وسائل التواصل</h6>
                                 <ul class="unorder-list" style="margin-top: auto;">
@@ -49,8 +42,12 @@
                                     <li><a href="{{info.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
                                                 class="fa">&#xf082;</i></a></li>
                                     {% endif %}
-
                                 </ul>
+                                <br><br><br> {% if medicine.description is not none %}
+                                <h5>الوصف</h5>
+                                
+                                <h6>{{ medicine.description }}</h6>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

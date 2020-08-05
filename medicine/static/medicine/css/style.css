@@ -85,6 +85,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+    margin-top: 60px;
 }
 
 .search-bar {
@@ -105,7 +106,11 @@ footer {
     width: 100%;
 }
 
-.provider-medicine, .signin-signup, .profile, .listofstorage, .productinfo {
+.provider-medicine,
+.signin-signup,
+.profile,
+.listofstorage,
+.productinfo {
     background: #fffffff2;
     box-shadow: 0 0 5px rgba(0, 0, 0, .2);
     padding: 10px;
@@ -114,7 +119,8 @@ footer {
     width: 100%;
 }
 
-.signin-signup, .profile {
+.signin-signup,
+.profile {
     border-radius: 10px;
     height: fit-content;
     margin: auto;
@@ -153,8 +159,8 @@ a {
     width: 300px;
 }
 
-img{
-    max-width: 100%; 
+img {
+    max-width: 100%;
 }
 
 .medicine-short-detail {
@@ -194,4 +200,20 @@ section {
 .Analytics .Analyticshaeder {
     font-size: 24px;
     padding-bottom: 10px;
+}
+
+#id_accType {
+    list-style: none;
+    float: right;
+    margin: 0;
+}
+
+#id_accType li {
+    float: right;
+    display: block;
+    margin: 0 5px;
+}
+
+.listofstorage img {
+max-height: 200px;
 }

@@ -1,26 +1,62 @@
-{% extends 'index.html'%}
-{% block content %}
+{% extends 'index.html'%} {% block content %}
 
 <section>
-            <div class="container">
-                <div class="col-md-12">
-                    <div class="p-5">
-                        <div class="row">
-                            <div class="signin-signup col-md-5 text-right ml-auto mr-auto">
-                                <div class="p-3">
-                                    <form class="form-signin" method="post" action="{% url 'inforegisterbackend' %}">
-                                        {% csrf_token %}
-                                        {{form}}
-                                        <div class="checkbox mb-3">
-                                        </div>
-                                        <button class="btn btn-lg btn-primary btn-block" type="submit">تسجيل</button>
-                                    </form>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="p-5">
+                <div class="row">
+                    <div class="signin-signup col-md-5 text-center ml-auto mr-auto">
+                        <div class="p-3">
+                            <form class="form-signin" method="post" action="">
+                                {% csrf_token %}
+                                <span id="acctypetxt">نوع الحساب</span> {{form}}
+                                <div id="locationInfo">
+                                    <h6 class="mt-2">العنوان</h6>
+                                    {{locForm}}
+                                    <h6 id="loc" style="display: none;">إذا يوجد أكثر من فرع الرجاء إضافتهم لاحقاً</h6>
                                 </div>
-                            </div>
+                                <div class="checkbox mb-3"></div>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit">تسجيل</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
+{% endblock %} {% block javaScript %}
+
+<script>
+    userex = '{{users}}';
+    if (userex != '') {
+        document.getElementById('locationInfo').style.display = 'none';
+        document.getElementById('acctypetxt').style.display = 'none';
+        document.getElementById('id_accType').style.display = 'none';
+    }
+
+    function AccTypeCheck() {
+        if (document.getElementById('id_accType_2').checked || document.getElementById('id_accType_1').checked) {
+            if (document.getElementById('id_accType_2').checked) {
+                document.getElementById('id_pharmacyName').placeholder = 'إسم المبادرة';
+                document.getElementById('loc').style.display = 'none';
+
+
+            } else if (document.getElementById('id_accType_1').checked) {
+                document.getElementById('id_pharmacyName').placeholder = 'إسم الصيدلية';
+                document.getElementById('loc').style.display = 'block';
+            }
+            document.getElementById('id_pharmacyName').style.display = 'block';
+            document.getElementById('id_facebookPage').style.display = 'block';
+        } else {
+            document.getElementById('loc').style.display = 'none';
+            document.getElementById('id_pharmacyName').style.display = 'none';
+            document.getElementById('id_facebookPage').style.display = 'none';
+        }
+    }
+</script>
 
 {% endblock %}
+
+<script type="text/javascript">

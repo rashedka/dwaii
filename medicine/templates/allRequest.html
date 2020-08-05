@@ -1,0 +1,45 @@
+{% extends 'index.html'%} {% load static%} {% load humanize %} {% block content %}
+
+<section>
+    <div class="alert alert-warning" role="alert">
+        يمكن ان تختلف الصورعن الدواء المعروض
+    </div>
+    <div class="container">
+
+        <div class="p-3">
+            <form class="form-inline d-flex justify-content-right md-form form-sm mt-0 mb-3" action="{% url 'search' %}" method="GET">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input class="form-control form-control-sm ml-3 w-50 search-bar" type="text" placeholder="أدخل إسم الدواء" aria-label="Search" name="search">
+            </form>
+            <div class="medicine-list">
+                {% for request in medicineList%}
+                <div class="provider-medicine col-md-12">
+                    <div class="m-2">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="image">
+                                    <img src="{{request.img.url}}" alt="لا تتوفر صورة للدواء" height="200" width="200">
+                                </div>
+                            </div>
+                            <div class="col-md-9 text-right">
+                                <h4>{{request.medicineGeneral}}</h4>
+                                <h6>
+                                    <a href="{% url 'visitProfile' request.username.id %}"><span>{{request.username.first_name}}</span></a>
+                                </h6>
+                                <h6><span>تاريخ الطلب :</span> <br> <span style="color:#0d0">
+                                        {{request.requestDate | naturalday}}</span></h6>
+                                <h6><span>الموقع : </span> <br> {% for loc in request.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> {{loc.city}}, {{loc.location}}
+                                    <br>{% endfor %}</h6>
+                                <a href="{% url 'requestinfo' request.id%}"><span class="btn btn-info"
+                                        style="float:left;">تواصل</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

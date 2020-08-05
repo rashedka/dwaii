@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'medicine',
+    'rest_framework',
     'django_filters',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -76,11 +78,11 @@ WSGI_APPLICATION = 'dwaii.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dwaii',
+        'NAME': 'dwaii2',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3306',
     }
 }
 
@@ -132,4 +134,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'dwaiisudan1@gmail.com'
 EMAIL_HOST_PASSWORD = 'r0536262443dd'
+
+# PWA Setup
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'medicine/static/medicine/js', 'serviceworker.js')
+PWA_APP_NAME = 'دوائي'
+PWA_APP_DESCRIPTION = "موقع يساعد المرضى على الوصول الى معرفة أماكن توفر الأدوية بصورة أسرع من خلال البحث عن الدواء في محرك البحث الخاص بالموقع"
+PWA_APP_BACKGROUND_COLOR = '#000000'
+PWA_APP_THEME_COLOR = '#0A0302'
 

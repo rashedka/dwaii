@@ -1,23 +1,26 @@
-{% load static %}
-{% load humanize %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+{% load static %} {% load humanize %} {% load pwa %}
 
 <head>
+    {% progressive_web_app_meta %}
+    <script data-ad-client="ca-pub-1818913905140371" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="موقع يساعد المرضى على الوصول الى معرفة أماكن توفر الأدوية بصورة أسرع من خلال البحث عن الدواء في محرك البحث الخاص بالموقع">
+    <meta name="description" content="موقع يساعد المرضى على الوصول الى معرفة أماكن توفر الأدوية بصورة أسرع من خلال البحث عن الدواء في محرك البحث الخاص بالموقع">
     <meta name="keywords" content="أدوية، البحث عن دواء، متوفر وين، أدوية السودان، السودان، دوائي، وين القى">
     <meta name="email" content="dwaiisudan@gmail.com">
     <title>Dwaii</title>
     <link rel="canonical" href="https://www.dwaiisudan.com">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'medicine/css/style.css'%}">
     <link rel="icon" href="{% static 'medicine/img/dwaiiIcon.jpeg' %}">
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -26,8 +29,7 @@
         <div class="navbar navbar-dark shadow-sm navbar-expand-md" style="background-color: #efefef;">
             <div class="container d-flex justify-content-between">
                 {% if request.user.is_authenticated %}
-                <span class="d-md-none"><span style="padding-left: 5px;">منور</span><a
-                        href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
+                <span class="d-md-none"><span style="padding-left: 5px;">منور</span><a href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
                 {% endif %}
                 <div class="col-md-4 col text-center d-md-none">
                     <div class="ml-auto mr-auto ">
@@ -37,13 +39,13 @@
                         </a>
                     </div>
                 </div>
-                <button type="button" class="navbar-toggler" style="background-color: #313131e6;" data-toggle="collapse"
-                    data-target="#navbarCollapse">
+                <button type="button" class="navbar-toggler" style="background-color: #313131e6;" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse col-md-4" id="navbarCollapse">
                     <div class="navbar-nav">
                         <a href="{% url 'allMedicine' %}">قائمة الأدوية</a>
+                        <a href="{% url 'requestList' %}">طلبات الأدوية</a>
                     </div>
                 </div>
                 <div class="col-md-4 col text-center d-none d-md-block">
@@ -58,12 +60,10 @@
                 <div class="collapse navbar-collapse col-md-4" id="navbarCollapse" style="flex-direction: row-reverse;">
                     <div class="navbar-nav">
                         {% if request.user.is_authenticated %}
-                        <span class="d-none d-md-block"> <span> منور </span> <a href="{% url 'profile' %}">
-                                {{request.user.first_name}}</a></span>
-                        <a href="{% url 'logout' %}">تسجيل خروج</a>
-                        {% else %}
-                        <a href="{% url 'sign' %}">دخول / تسجيل صيدلية</a>
-                        {% endif %}
+                        <span class="d-none d-md-block"> <span> منور </span>
+                        <a href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
+                        <a href="{% url 'logout' %}">تسجيل خروج</a> {% else %}
+                        <a href="{% url 'sign' %}">دخول / تسجيل صيدلية</a> {% endif %}
                     </div>
                 </div>
             </div>
@@ -76,14 +76,11 @@
         <main class="slider">
             <div class="container">
                 <div class="p-sm-2">
-
-                    <h4 style="margin-bottom: 25px; margin-top: 100px;"> يمكنك البحث عن الدواء الذي تحتاجه من هنا </h4>
+                    <h2 style="color: #ec3535;">إبحث عن دوائك بكل سهولة</h2>
+                    <h4 style="margin-bottom: 25px;"> يمكنك البحث عن الدواء الذي تحتاجه من هنا </h4>
                     <!-- Search form -->
-                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0"
-                        action="{% url 'search' %}" method="GET">
-                        <input class="form-control form-control-sm ml-3 col-md-12 col-sm-12 search-bar" type="text"
-                            placeholder="أدخل إسم الدواء (العلمي أو التجاري) باللغة الإنجليزية" aria-label="Search"
-                            name="search">
+                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0" action="{% url 'search' %}" method="GET">
+                        <input class="form-control form-control-sm ml-3 col-md-12 col-sm-12 search-bar" type="text" placeholder="أدخل إسم الدواء (العلمي أو التجاري) باللغة الإنجليزية" aria-label="Search" name="search">
                         <input class="btn btn-primary" type="submit" value="بحث" style="margin-top: 15px;">
 
                     </form>
@@ -124,36 +121,36 @@
             </div>
         </main>
 
-        {% endblock  %}
+        {% endblock %}
         <!-- Footer -->
 
 
         <footer class="page-footer font-small blue">
+            <div class="container">
+                <div class="row">
+                    <div class="text-right py-3 col-md-4">
+                        <a href="{% url 'privacy' %}" style="color: #fff " class="mx-2"> سياسة الخصوصية</a> |
+                        <a href="{% url 'contact' %}" style="color: #fff" class="mx-2">إتصل بنا</a>
+                    </div>
 
-            <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">جميع الحقوق محغوظة
-                <a href="telto:966536262443" style="color: #4fb6ff">Kwemrj</a>
+                    <!-- Copyright -->
+                    <div class="footer-copyright text-center py-3 col-md-4">جميع الحقوق محفوظة
+                        <a href="tel:966536262443" style="color: #4fb6ff">Kwemrj</a>
+                    </div>
+                    <!-- Copyright -->
+
+                </div>
             </div>
-            <!-- Copyright -->
-
         </footer>
         <!-- Footer -->
     </div>
 
+    {% block javaScript %} {% endblock %}
 
-
-
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+    <script src="{% static 'medicine/js/main.js'%}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 
 </html>

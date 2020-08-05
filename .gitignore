@@ -3,3 +3,9 @@ medicine/__pycache__/models.cpython-38.pyc
 medicine/__pycache__/views.cpython-38.pyc
 media/medicine/pharmpro.jpg
 media/medicine/logo2_k7qUzXw.jpg
+*.pyc
+*.pyc
+dwaii/__pycache__/settings.cpython-38.pyc
+dwaii/__pycache__/urls.cpython-38.pyc
+medicine/__pycache__/admin.cpython-38.pyc
+*.pyc
