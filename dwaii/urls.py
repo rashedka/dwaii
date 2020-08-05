@@ -14,18 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path, include
+from django.views.generic import RedirectView
 
-from medicine.views import index, adminDash
+from medicine.views import index, adminDash, privacy, contact
 from django.conf import settings
 from django.conf.urls.static import static
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('adminDashboard', adminDash, name='adminDash'),
-    path('medicine/', include('medicine.urls'))
+    path('medicine/', include('medicine.urls')),
+    path('', include('pwa.urls')),
+    path('privacy/', privacy, name='privacy'),
+    path('contact/', contact, name='contact'),
+    path("ads.txt",RedirectView.as_view(url=staticfiles_storage.url("ads.txt")),),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

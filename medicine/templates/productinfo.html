@@ -1,7 +1,4 @@
-{% extends 'index.html'%}
-{% load static%}
-{% load humanize %}
-{% block content %}
+{% extends 'index.html'%} {% load static%} {% load humanize %} {% block content %}
 
 <section>
     <div class="container">
@@ -16,9 +13,20 @@
                                 </div>
                             </div>
                             <div class="col-md text-right detail  mb-auto mt-auto">
-                                <h2 class="mb-4" style="text-transform: capitalize;">{{medicine.medicine.generalName}}
+                                <h2 class="mb-2" style="text-transform: capitalize;">{{medicine.medicine.generalName}}
                                 </h2>
-                                <h6><span>صيدلية : </span>{{info.pharmacyName}}</h6>
+                                <h3 style="text-transform: capitalize;">{{medicine.medicine.scientificName}}</h3>
+                                <a href="{% url 'visitProfile' medicine.username.id %}">
+                                    {% if info.accType == 'ph' %}
+                                    {% if 'صيدلية' in info.pharmacyName or 'صيدليه' in info.pharmacyName %}
+                                    <h6>{{info.pharmacyName}}</h6>
+                                    {% else %}
+                                    <h6><span>صيدلية : </span>{{info.pharmacyName}}</h6>
+                                    {% endif%} {% elif info.accType == 'or' %}
+                                    <h6><span>مبادرة : </span>{{info.pharmacyName}}</h6>
+                                    {% else %}
+                                    <h6>{{info.username.first_name}} {{info.username.last_name}}</h6>
+                                 {% endif %}</a>
                                 <h6><span>أخر تحديث </span><span>:
                                         {{medicine.updateDate | naturalday}}</span></h6>
                                 <h6><span>السعر : </span>{{medicine.price}} <span> جنيه </span></h6>
@@ -27,17 +35,21 @@
                                 {% elif not medicine.is_Available %}
                                 <h6><span style="color: #BF211E;">نفذت الكمية</span></h6>
                                 {% endif %}
-                                <h6><span>الموقع : </span><span>{{info.city}}, {{info.location}}</span></h6>
+                                <h6><span>الموقع : </span><span>{% for info in location %}{{info.city}},
+                                        {{info.location}} <br> {% endfor %}</span></h6>
                                 <h6>وسائل التواصل</h6>
                                 <ul class="unorder-list" style="margin-top: auto;">
-                                    <li><a href="telto:{{info.phone_number}}" style="color:black"><i
+                                    {% if info.phone_number != null%}
+                                    <li><a href="tel:{{info.phone_number}}" style="color:black"><i
                                                 style="font-size:34px" class="fa">&#xf095;</i></a></li>
-                                    <li><a href="https://wa.me/{{info.phone_number}}"
-                                            style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
+                                    {% endif %} {% if info.whatsappNumber != null%}
+                                    <li><a href="https://wa.me/{{info.whatsappNumber}}" style="color:#006400; margin: 0 10px;"><i style="font-size:34px"
                                                 class="fa">&#xf232;</i></a></li>
-                                    <li><a href="{{info.facebookPage}}"
-                                            style="color:#26e; "><i style="font-size:34px"
+                                    {% endif %} {% if info.facebookPage != null%}
+                                    <li><a href="{{info.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
                                                 class="fa">&#xf082;</i></a></li>
+                                    {% endif %}
+
                                 </ul>
                             </div>
                         </div>

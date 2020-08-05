@@ -1,0 +1,86 @@
+{% extends 'index.html'%} {% load static%} {% load humanize %} {% block content %}
+
+<section>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="pt-5">
+                <div class="productinfo col-md-12 text-center ml-auto mr-auto">
+                    <div class="m-2">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="image">
+                                    <img src="{{medicine.img.url}}" alt="noooo" height="200" width="200">
+                                </div>
+                            </div>
+                            <div class="col-md text-right detail  mb-auto mt-auto">
+                                <h2 class="mb-2" style="text-transform: capitalize;">{{medicine.medicineGeneral}}
+                                </h2>
+                                <a href="{% url 'visitProfile' medicine.username.id %}">
+                                    {% if info.accType == 'ph' %}
+                                    {% if 'صيدلية' in info.pharmacyName or 'صيدليه' in info.pharmacyName %}
+                                    <h6>{{info.pharmacyName}}</h6>
+                                    {% else %}
+                                    <h6><span>صيدلية : </span>{{info.pharmacyName}}</h6>
+                                    {% endif%} {% elif info.accType == 'or' %}
+                                    <h6><span>مبادرة : </span>{{info.pharmacyName}}</h6>
+                                    {% else %}
+                                    <h6>{{info.username.first_name}} {{info.username.last_name}}</h6>
+                                {% endif %}</a>
+                                <h6><span>تاريخ الطلب</span><span>:
+                                        {{medicine.requestDate | naturalday}}</span></h6>
+                                <h6><span>الموقع : </span><span> <br>{% for info in location %} <i class="fas fa-map-marker-alt"></i> {{info.city}},
+                                        {{info.location}} <br> {% endfor %}</span></h6>
+                                <h6>وسائل التواصل</h6>
+                                <ul class="unorder-list" style="margin-top: auto;">
+                                    {% if info.phone_number != null%}
+                                    <li><a href="tel:{{info.phone_number}}" style="color:black"><i
+                                                style="font-size:34px" class="fa">&#xf095;</i></a></li>
+                                    {% endif %} {% if info.whatsappNumber != null%}
+                                    <li><a href="https://wa.me/{{info.whatsappNumber}}" style="color:#006400; margin: 0 10px;"><i style="font-size:34px"
+                                                class="fa">&#xf232;</i></a></li>
+                                    {% endif %} {% if info.facebookPage != null%}
+                                    <li><a href="{{info.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
+                                                class="fa">&#xf082;</i></a></li>
+                                    {% endif %}
+                                </ul>
+                                <br><br><br> {% if medicine.description is not none %}
+                                <h5>الوصف</h5>
+                                
+                                <h6>{{ medicine.description }}</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="productinfo col-md-12 text-center ml-auto mr-auto">
+                    <div class="m-2">
+                        <h4>أدوية ذات صلة</h4>
+                        <div class="row">
+                            {% for relatedMed in relatedMeds%}
+                            <div class="col-md text-center detail" style="border: 1px solid #000000; margin: 10px;">
+                                <div class="image">
+                                    <img src="{{u.medicine.img.url}}" alt="noooo" height="200" width="200">
+                                </div>
+                                <h4>{{u.medicine.generalName}}</h4>
+                                <h6><span>السعر : </span>{{u.price}} <span> جنيه </span></h6>
+                                <h6>طرق التواصل</h6>
+                                <ul class="unorder-list">
+                                    <li><a href="" style="color:black"><i style="font-size:34px"
+                                                class="fa">&#xf095;</i></a></li>
+                                    <li><a href="" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
+                                                class="fa">&#xf232;</i></a></li>
+                                    <li><a href=""><i style="font-size:34px" class="fa">&#xf230;</i></a></li>
+                                </ul>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

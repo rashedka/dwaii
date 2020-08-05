@@ -1,0 +1,25 @@
+{% extends 'index.html'%}
+{% block content %}
+
+        <section>
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="p-5">
+                        <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                            <form style=" text-align: right;" method="post" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <h3 style=" text-align: center;">طلب دواء</h3>
+                                {{form}}
+                                <br>
+                                {{msg}}
+                                <div class="checkbox mb-3">
+                                </div>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit"><span>أطلب</span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

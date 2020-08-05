@@ -1,42 +1,43 @@
 {% extends 'index.html'%}
 {% block content %}
 
-        <section>
-            <div class="container">
-                <div class="col-md-12">
-                    <div class="p-5">
-                        <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                            <form style=" text-align: center;" method="post" action="{% url 'add_to_storage_backend' %}" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 55px !important;">
-                                    إضافة دواء</h1>
-                                <div style="display: flex">
-                                <select type="text" class="form-control col-md-9" placeholder="إسم الدواء"
-                                    autofocus="" name="med_name" required>
-                                    <option value="" selected>----إسم الدواء----</option>
-                                        {% for med in medicine %}
-                                    <option value="{{med.generalName}}">{{med.generalName}}</option>
-                                        {% endfor %}
-                                </select>
-                                <div class="col-md-3">
-                                    <a href="{% url 'addMedicine' %}">اضافة دواء غير موجود في القائمة</a>
-                                </div>
-                                    </div>
-                                    <div class="cus">
-                                    <input type="number" id="inputText" class="form-control col-md-3" placeholder="السعر"
-                                        required autofocus="" name="price">
-                                    </div>
-                                <input type="text" id="inputEmail" class="form-control col-md-10"
-                                    placeholder="التركيز(جرام/مل)" required autofocus="" name="dose">
-                                {{msg}}
-                                <div class="checkbox mb-3">
-                                </div>
-                                <button class="btn btn-lg btn-primary btn-block" type="submit">إضافة</button>
-                            </form>
+<section>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="p-5">
+                <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                    <form style=" text-align: right;" method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h3 style=" text-align: center;"><span>إضافة دواء</span>
+                            <span>{% if user.accType == 'ph' %} للصيدلية {% elif user.accType == 'or' %}في لستة المبادرة
+                                {% elif user.accType == 'no' %} الى قائمة التبرع {% elif user.accType == 've' %} الى قائمة
+                                الأدوية المعروضة للبيع {% endif %} </span>
+                        </h3>
+                        {{form.medicine.label}}
+                        {{form.medicine}} <a href="{% url 'addMedicine'%}">إضافة دواء غير موجود في القائمة</a>
+                        {{form.price}}
+                        {{form.dose}}
+                        {{msg}}
+                        <div class="checkbox mb-3">
                         </div>
-                    </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">إضافة</button>
+                    </form>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javaScript %}
+
+<script>
+    var accType = "{{ user.accType }}"
+    if (accType.includes('no') || accType.includes('or') ){
+        document.forms[0].price.value = 0
+        document.forms[0].price.hidden = true
+    }
+</script>
 
 {% endblock %}

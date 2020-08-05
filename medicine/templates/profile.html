@@ -1,6 +1,4 @@
-{% extends 'index.html'%}
-{% load static %}
-{% block content %}
+{% extends 'index.html'%} {% load static %} {% block content %}
 
 <section>
     <div class="container">
@@ -10,18 +8,34 @@
                     <div class="p-3">
                         <div class="row">
                             <div class="col-md text-right pt-4 ml-auto mr-auto">
-                                <h4> صيدلية {{user.pharmacyName}}</h4>
-                                <h6><span>المدينة : </span> {{user.city}}</h6>
-                                <h6><span>الموقع : </span> {{user.location}}</h6>
+                                {% if user.accType == 'ph' %} {% if 'صيدلية' in user.pharmacyName or 'صيدليه' in user.pharmacyName %}
+                                <h4>{{user.pharmacyName}}</h4>
+                                {% else %}
+                                <h4>صيدلية {{user.pharmacyName}}</h4>
+                                {% endif%} {% elif user.accType == 'or' %}
+                                <h4><span style="color:#0f0f0fff">مبادرة</span> {{user.pharmacyName}}</h4>
+                                {% else %}
+                                <h4>{{user.username.first_name|upper}} {{user.username.last_name |upper}}</h4>
+                                {% endif %}
+                                <h6><span>الموقع : </span> <br> {% for loc in user.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> <span>الفرع </span>{{ forloop.counter }}
+                                    <span>:</span> {{loc.city}}, {{loc.location}} <br>{% endfor %}
+                                    <span> <a href="{% url 'addBranch' %}">إضافة فرع</a>
+                                    </span></h6>
+                                {% if user.accType == 'ph' %} {% endif %}
                                 <h6><span>طرق التواصل</span></h6>
+                                {{ section.title }}
                                 <div class="socialMedia text-center">
                                     <ul class="unorder-list">
-                                        <li><a href="telto:{{user.phone_number}}" style="color:black"><i style="font-size:34px"
-                                                    class="fa">&#xf095;</i></a></li>
-                                        <li><a href="https://wa.me/{{user.phone_number}}" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
+                                        {% if user.phone_number != null%}
+                                        <li><a href="tel:{{user.phone_number}}" style="color:black"><i
+                                                    style="font-size:34px" class="fa">&#xf095;</i></a></li>
+                                        {% endif %} {% if user.whatsappNumber != null%}
+                                        <li><a href="https://wa.me/{{user.whatsappNumber}}" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
                                                     class="fa">&#xf232;</i></a></li>
-                                        <li><a href="{{user.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
-                                                class="fa">&#xf082;</i></a></li>
+                                        {% endif %} {% if user.facebookPage != null%}
+                                        <li><a href="{{user.facebookPage}}" style="color:#26e; "><i
+                                                    style="font-size:34px" class="fa">&#xf082;</i></a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>
@@ -29,38 +43,52 @@
                     </div>
                 </div>
             </div>
+
             <div class="pt-4">
                 <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-
-                    <form method="get">
-
-                        {{myFilter.form}}
-
-                        <button type="submit">Search</button>
-                    </form>
-
-                </div>
-            </div>
-            <div class="pt-4">
-                <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                    <h3 class="pt-3 pb-3"> الآدوية المتوفرة في الصيدلية</h3>
+                    <h3 class="pt-3 pb-3"> قائمة الآدوية {% if user.accType == 'ph' %} المتوفرة في الصيدلية {% elif user.accType == 'or' %} المتوفرة في المبادرة {% elif user.accType == 'no' %} المطلوبة{% endif %}</h3>
                     <div class="table-responsive">
-                        <h4 class="bu"><a style="color: #000 !important" href="{% url 'add_to_storage' %}">إضافة دواء الى الصيدلية</a></h4>
+                        {% if user.accType != 'no' %}
+                        <h4 class="bu"><a style="color: #000 !important" href="{% url 'add_to_storage' %}"><span>إضافة
+                                    دواء الى </span> {% if user.accType == 'ph' %} الصيدلية
+                                {% elif user.accType == 'or' %} المبادرة {% elif user.accType == 've' %} الأدوية
+                                المعروضة للبيع {% endif %}</a></h4>
+                        {% else%}
+                        <h4 class="bu">
+                            <a style="color: #000 !important" href="{% url 'requestMedicine' %}">طلب دواء</a>
+                        </h4>
+                        {% endif %}
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
+                                    {% if user.accType == 'no' %}
+                                    <th>#</th>
+                                    <th scope="col">إسم الدواء</th>
+                                    <th scope="col">تاريخ الطلب</th>
+                                    <th scope="col">صورة الدواء</th>
+                                    {% else %}
+                                    <th>#</th>
                                     <th scope="col">إسم الدواء</th>
                                     <th scope="col">الإسم العلمي</th>
                                     <th scope="col">السعر</th>
                                     <th scope="col">التركيز</th>
                                     <th scope="col">الحالة</th>
+                                    <th scope="col">تعديل</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for med in medicine %}
+                                {% if user.accType == 'no' %} {% for med in user.username.requestmedi_set.all %}
                                 <tr>
-                                    <th scope="row">{{med.id}}</th>
+                                    <th>{{ forloop.counter }}</th>
+                                    <td>{{med.medicineGeneral}}</td>
+                                    <td>{{med.requestDate}}</td>
+                                    <td><img src="{{med.img.url}}" alt="" width="50"></td>
+
+                                </tr>
+                                {% endfor %} {% else %} {% for med in medicine %}
+                                <tr>
+                                    <th>{{ forloop.counter }}</th>
                                     <td>{{med.medicine.generalName}}</td>
                                     <td>{{med.medicine.scientificName}}</td>
                                     <td>{{med.price}} جنيه</td>
@@ -70,10 +98,12 @@
                                     {% else %}
                                     <td>غير متوفر</td>
                                     {% endif %}
-                                    <td><a href="{% url 'editproduct' med.id%}"><span>تعديل</span></a></td>
+                                    <td><a href="{% url 'editproduct' med.id%}"><span><i style="font-size:24px"
+                                                    class="fa">&#xf040;</i></span></a></td>
                                 </tr>
-                                {% endfor %}
+                                {% endfor %} {% endif %}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -81,5 +111,11 @@
         </div>
     </div>
 </section>
+
+{% endblock %} {% block javaScript %}
+
+<script>
+    document.forms[0].label[0].innerHtml = 'إسم الدواء'
+</script>
 
 {% endblock %}
