@@ -12,6 +12,11 @@ accountType = [
     ('ve', 'بائع'),
 ]
 
+requestType = [
+    ('request', 'طلب'),
+    ('donate', 'تبرع'),
+]
+
 
 class user_info(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -73,6 +78,7 @@ class requestMedi(models.Model):
     img = models.ImageField(upload_to="medicine/request/new/", default="profile.png", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     requestDate = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=20, choices=requestType)
     prescription = models.ImageField(upload_to="medicine/request/", null=True, blank=True)
 
     def __str__(self):

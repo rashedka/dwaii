@@ -19,9 +19,11 @@ from django.db.models import Q
 def base_layout(request):
     return render(request, 'index.html')
 
-
 def privacy(request):
     return render(request, 'privacy.html')
+
+def aboutUs(request):
+    return render(request, 'aboutus.html')
 
 
 def contact(request):
@@ -354,12 +356,17 @@ def requestMedicine(request):
                 requrstModel = requestMedi()
                 requrstModel.username = request.user
                 requrstModel.medicineGeneral = requestForm.cleaned_data['medicineGeneral']
+                requrstModel.type = requestForm.cleaned_data['type']
                 requrstModel.img = requestForm.cleaned_data['img']
                 requrstModel.description = requestForm.cleaned_data['description']
                 requrstModel.prescription = requestForm.cleaned_data['prescription']
                 requrstModel.save()
-                msg = 'تمت إضافة الدواء الى قائمة الأدوية المطلوبة : {}'.format(
-                    requestForm.cleaned_data['medicineGeneral'])
+                if requestForm.cleaned_data['type'] == 'request':
+                    msg = 'تمت إضافة الدواء الى قائمة الأدوية المطلوبة : {}'.format(
+                        requestForm.cleaned_data['medicineGeneral'])
+                else:
+                    msg = 'تمت إضافة الدواء الى قائمة الأدوية المتبرع بها : {}'.format(
+                        requestForm.cleaned_data['medicineGeneral'])
             else:
                 msg = 'لم يتم اضافة الدواء'
 
@@ -373,12 +380,48 @@ def requestMedicine(request):
 
 
 def requestList(request):
-    list = requestMedi.objects.all().order_by('requestDate')
+    list = requestMedi.objects.all().order_by('requestDate').filter(type='request')
     context = {
         'medicineList': list,
     }
     return render(request, 'allRequest.html', context)
 
+def searchRequest(request):
+    searchword = request.GET['search']
+    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='request').order_by('medicineGeneral', '-requestDate').all()
+
+    if searchresult.exists():
+        msg = ""
+    else:
+        msg = "الدواء غير موجود"
+    context = {
+        'searchValue': searchword,
+        'medicineList': searchresult,
+        'msg': msg,
+    }
+    return render(request, 'allRequest.html', context)
+
+def donateList(request):
+    list = requestMedi.objects.all().order_by('requestDate').filter(type='donate')
+    context = {
+        'medicineList': list,
+    }
+    return render(request, 'alldonate.html', context)
+
+def searchdonate(request):
+    searchword = request.GET['search']
+    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='donate').order_by('medicineGeneral', '-requestDate').all()
+
+    if searchresult.exists():
+        msg = ""
+    else:
+        msg = "الدواء غير موجود"
+    context = {
+        'searchValue': searchword,
+        'medicineList': searchresult,
+        'msg': msg,
+    }
+    return render(request, 'alldonate.html', context)
 
 def addBranch(request):
     forms = addBranchForm()

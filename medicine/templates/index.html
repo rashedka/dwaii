@@ -29,7 +29,7 @@
         <div class="navbar navbar-dark shadow-sm navbar-expand-md" style="background-color: #efefef;">
             <div class="container d-flex justify-content-between">
                 {% if request.user.is_authenticated %}
-                <span class="d-md-none"><span style="padding-left: 5px;">منور</span><a href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
+                <span class="d-md-none"><span style="padding-left: 5px;">منور</span><a href="{% url 'profile' %}" style="color: #4fb6ff;">{{request.user.first_name}}</a></span>
                 {% endif %}
                 <div class="col-md-4 col text-center d-md-none">
                     <div class="ml-auto mr-auto ">
@@ -46,6 +46,7 @@
                     <div class="navbar-nav">
                         <a href="{% url 'allMedicine' %}">قائمة الأدوية</a>
                         <a href="{% url 'requestList' %}">طلبات الأدوية</a>
+                        <a href="{% url 'donateList' %}">تبرعات الأدوية</a>
                     </div>
                 </div>
                 <div class="col-md-4 col text-center d-none d-md-block">
@@ -63,7 +64,7 @@
                         <span class="d-none d-md-block"> <span> منور </span>
                         <a href="{% url 'profile' %}">{{request.user.first_name}}</a></span>
                         <a href="{% url 'logout' %}">تسجيل خروج</a> {% else %}
-                        <a href="{% url 'sign' %}">دخول / تسجيل صيدلية</a> {% endif %}
+                        <a href="{% url 'sign' %}">دخول / تسجيل</a> {% endif %}
                     </div>
                 </div>
             </div>
@@ -129,8 +130,9 @@
             <div class="container">
                 <div class="row">
                     <div class="text-right py-3 col-md-4">
+                        <a href="{% url 'aboutUs' %}" style="color: #fff" class="mx-2">من نحن</a> |
                         <a href="{% url 'privacy' %}" style="color: #fff " class="mx-2"> سياسة الخصوصية</a> |
-                        <a href="{% url 'contact' %}" style="color: #fff" class="mx-2">إتصل بنا</a>
+                        <a href="{% url 'contact' %}" style="color: #fff" class="mx-2">إتصل بنا</a> 
                     </div>
 
                     <!-- Copyright -->

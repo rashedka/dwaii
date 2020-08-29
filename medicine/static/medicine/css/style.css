@@ -107,6 +107,7 @@ footer {
 }
 
 .provider-medicine,
+.aboutUs
 .signin-signup,
 .profile,
 .listofstorage,
@@ -120,6 +121,7 @@ footer {
 }
 
 .signin-signup,
+.aboutUs,
 .profile {
     border-radius: 10px;
     height: fit-content;
@@ -216,4 +218,11 @@ section {
 
 .listofstorage img {
 max-height: 200px;
+}
+
+.descriptionBox {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    width: 90%;
 }

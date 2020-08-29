@@ -4,14 +4,18 @@ from django.urls import path
 
 from medicine.views import search, allMedicine, sign, logout_backend, \
     profile, add_to_storage, productinfo, Registerinfo, editproduct, \
-    editproductBackend, addMedicine, requestMedicine, requestList, visitorProfile, requestinfo, addBranch
+    editproductBackend, addMedicine, requestMedicine, requestList, visitorProfile, requestinfo, addBranch, \
+    searchRequest, searchdonate, donateList
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
                   path('search', search, name='search'),
+                  path('searchRequest', searchRequest, name='search'),
+                  path('searchDonate', searchdonate, name='search'),
                   path('sign/', sign, name='sign'),
                   path('', allMedicine, name='allMedicine'),                  
                   path('requestList/', requestList, name='requestList'),
+                  path('donateList/', donateList, name='donateList'),
                   path('request/add', requestMedicine, name='requestMedicine'),
                   path('profile/add_to_storage/', add_to_storage, name='add_to_storage'),
                   path('profile/addMedicine/', addMedicine, name='addMedicine'),

@@ -185,22 +185,24 @@ class registerForm(forms.Form):
 class requestMedForm(forms.ModelForm):
     class Meta:
         model = requestMedi
-        fields = ['medicineGeneral', 'description', 'prescription', 'img']
+        fields = ['type', 'medicineGeneral', 'description', 'prescription', 'img']
         exclude = ['username']
 
         labels = {
             'dose': '',
+            'type': 'الرجاء تحديد النوع طلب / تبرع',
             'medicineGeneral': '',
             'description': '',
             'img': 'صورة للدواء',
-            'prescription': 'الوصفة الطبية (الرورشتة) (إن وجد)'
+            'prescription': 'الوصفة الطبية (الرورشتة)(الرجاء إضافتها في حالة الطلب)'
         }
         widgets = {
             'medicineGeneral': forms.TextInput(attrs={'class': 'form-control col-md-3', 'placeholder': 'إسم الدواء'}),
+            'type': forms.Select(attrs={'class': 'form-control col-md-3 mt-0'}),
             'description': forms.Textarea(
-                attrs={'class': 'form-control col-md-6', 'placeholder': 'الوصف (إختياري)', 'style': 'height: 100px;'}),
-            'prescription': forms.FileInput(attrs={'class': 'col-md-9 mb-3 mt-3'}),
-            'img': forms.FileInput(attrs={'class': 'col-md-9 mb-3'}, ),
+                attrs={'class': 'form-control col-md-6 mb-3', 'placeholder': 'الوصف (إختياري)', 'style': 'height: 100px;'}),
+            'prescription': forms.FileInput(attrs={'class': 'col-md-12 mb-3 mt-0'}),
+            'img': forms.FileInput(attrs={'class': 'col-md-12 mb-3'}, ),
         }
 
 

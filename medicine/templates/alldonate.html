@@ -27,7 +27,7 @@
                                 <h6>
                                     <a href="{% url 'visitProfile' request.username.id %}"><span>{{request.username.first_name}}</span></a>
                                 </h6>
-                                <h6><span>تاريخ الطلب :</span> <br> <span style="color:#0d0">
+                                <h6><span>تاريخ التبرع :</span> <br> <span style="color:#0d0">
                                         {{request.requestDate | naturalday}}</span></h6>
                                 <h6><span>الموقع : </span> <br> {% for loc in request.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> {{loc.city}}, {{loc.location}}
                                     <br>{% endfor %}</h6>

@@ -18,13 +18,14 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from medicine.views import index, adminDash, privacy, contact
+from medicine.views import index, adminDash, privacy, contact, aboutUs
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('aboutus/', aboutUs, name='aboutUs'),
     path('adminDashboard', adminDash, name='adminDash'),
     path('medicine/', include('medicine.urls')),
     path('', include('pwa.urls')),

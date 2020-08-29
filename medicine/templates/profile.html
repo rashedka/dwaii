@@ -17,10 +17,10 @@
                                 {% else %}
                                 <h4>{{user.username.first_name|upper}} {{user.username.last_name |upper}}</h4>
                                 {% endif %}
-                                <h6><span>الموقع : </span> <br> {% for loc in user.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> <span>الفرع </span>{{ forloop.counter }}
-                                    <span>:</span> {{loc.city}}, {{loc.location}} <br>{% endfor %}
-                                    <span> <a href="{% url 'addBranch' %}">إضافة فرع</a>
-                                    </span></h6>
+                                <h6><span>الموقع : </span> <br> {% for loc in user.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> <span>{% if user.accType == 'ph' %}الفرع</span>{{ forloop.counter }}
+                                    <span>:  {% endif %} </span> {{loc.city}}, {{loc.location}} <br>{% endfor %}
+                                    {% if user.accType == 'ph' %}<span> <a href="{% url 'addBranch' %}">إضافة فرع</a>
+                                    </span> {% endif %} </h6>
                                 {% if user.accType == 'ph' %} {% endif %}
                                 <h6><span>طرق التواصل</span></h6>
                                 {{ section.title }}
@@ -28,7 +28,7 @@
                                     <ul class="unorder-list">
                                         {% if user.phone_number != null%}
                                         <li><a href="tel:{{user.phone_number}}" style="color:black"><i
-                                                    style="font-size:34px" class="fa">&#xf095;</i></a></li>
+                                                    style="font-size:34px" class="fa">&#xf095;</i>{{user.phone_number}}</a></li>
                                         {% endif %} {% if user.whatsappNumber != null%}
                                         <li><a href="https://wa.me/{{user.whatsappNumber}}" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px"
                                                     class="fa">&#xf232;</i></a></li>
@@ -46,7 +46,7 @@
 
             <div class="pt-4">
                 <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                    <h3 class="pt-3 pb-3"> قائمة الآدوية {% if user.accType == 'ph' %} المتوفرة في الصيدلية {% elif user.accType == 'or' %} المتوفرة في المبادرة {% elif user.accType == 'no' %} المطلوبة{% endif %}</h3>
+                    <h3 class="pt-3 pb-3"> قائمة الآدوية {% if user.accType == 'ph' %} المتوفرة في الصيدلية {% elif user.accType == 'or' %} المتوفرة في المبادرة {% elif user.accType == 'no' %} المطلوبة / المتبرع بيها{% endif %}</h3>
                     <div class="table-responsive">
                         {% if user.accType != 'no' %}
                         <h4 class="bu"><a style="color: #000 !important" href="{% url 'add_to_storage' %}"><span>إضافة
@@ -55,7 +55,7 @@
                                 المعروضة للبيع {% endif %}</a></h4>
                         {% else%}
                         <h4 class="bu">
-                            <a style="color: #000 !important" href="{% url 'requestMedicine' %}">طلب دواء</a>
+                            <a style="color: #000 !important" href="{% url 'requestMedicine' %}">تبرع / طلب دواء</a>
                         </h4>
                         {% endif %}
                         <table class="table table-hover">
@@ -66,6 +66,7 @@
                                     <th scope="col">إسم الدواء</th>
                                     <th scope="col">تاريخ الطلب</th>
                                     <th scope="col">صورة الدواء</th>
+                                    <th scope="col">النوع</th>
                                     {% else %}
                                     <th>#</th>
                                     <th scope="col">إسم الدواء</th>
@@ -83,6 +84,7 @@
                                     <th>{{ forloop.counter }}</th>
                                     <td>{{med.medicineGeneral}}</td>
                                     <td>{{med.requestDate}}</td>
+                                    <td>{{med.type}}</td>
                                     <td><img src="{{med.img.url}}" alt="" width="50"></td>
 
                                 </tr>
