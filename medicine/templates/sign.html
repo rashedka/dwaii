@@ -10,13 +10,14 @@
                                 <div class="p-3">
                                     <form class="form-signin" action="" method="post">
                                         {% csrf_token %}
-                                        <h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 55px !important;">
+                                        <h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 20px !important;">
                                             تسجيل دخول</h1>
                                         {{form.username}}
                                         {{form.username.errors }}
                                         {{form.password}}
                                         {{form.password.errors }}
                                         {{msg1}}
+                                        <p><a href="{% url 'reset_password' %}" style="color:#260ffd;">هل نسيت كلمة السر ؟ </a></p>
 
                                         <div class="checkbox mb-3"></div>
 
@@ -28,12 +29,13 @@
                                 <div class="p-3">
                                     <form class="form-signin" method="post" action="">
                                         {% csrf_token %}
-                                        <h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 55px !important;">
+                                        <h1 class="h3 mb-2 font-weight-normal" style="margin-bottom: 20px !important;">
                                             تسجيل حساب جديد</h1>
                                         {% for field in formRegister %}
                                         {{field}}
                                         {{field.errors}}
                                         {% endfor %}
+                                        <div class="left">{{accTypeform}}</div>
                                         <div class="checkbox mb-3">
                                         </div>
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">التسجيل</button>

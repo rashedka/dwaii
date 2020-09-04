@@ -5,22 +5,25 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from medicine.models import user_info, medicine, storage, requestMedi, location
+from medicine.models import user_info, medicine, storage, requestMedi, location, pharmacyAcc, CustomerAcc, \
+    organizationAcc
 from . import form
 from django.core.mail import send_mail
 from django.conf import settings
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users
 from .form import medicineForm, userInfoForm, addToStorageForm, editStorageForm, loginForm, requestMedForm, \
-    registerForm, locationForm, contactForm, addBranchForm
+    registerForm, locationForm, contactForm, addBranchForm, organizationAccForm, CustomerAccForm, PharmacyAccForm
 from django.db.models import Q
 
 
 def base_layout(request):
     return render(request, 'index.html')
 
+
 def privacy(request):
     return render(request, 'privacy.html')
+
 
 def aboutUs(request):
     return render(request, 'aboutus.html')
@@ -68,10 +71,14 @@ def index(request):
 def sign(request):
     form = loginForm()
     formRegister = registerForm()
+    accTypeform = userInfoForm()
+
     msg1 = ''
     if request.method == 'POST':
         form = loginForm(request.POST)
         formRegister = registerForm(request.POST)
+        accTypeform = userInfoForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -81,7 +88,8 @@ def sign(request):
                 return redirect(profile)
             else:
                 msg1 = 'يوجد خطأ في إسم المستخدم أو كلمة السر'
-        elif formRegister.is_valid():
+        elif formRegister.is_valid() and accTypeform.is_valid():
+            userInfo = user_info()
             username = formRegister.cleaned_data['username2']
             password = formRegister.cleaned_data['password1']
             email = formRegister.cleaned_data['email']
@@ -92,14 +100,19 @@ def sign(request):
             user.first_name = formRegister.cleaned_data['first_name']
             user.last_name = formRegister.cleaned_data['last_name']
             user.save()
+
             result = authenticate(username=username, password=password)
             if result is not None:
                 login(request, result)
+                userInfo.username = request.user
+                userInfo.accType = accTypeform.cleaned_data['accType']
+                userInfo.save()
                 return redirect('infoRegister')
 
     context = {
         'form': form,
         'formRegister': formRegister,
+        'accTypeform': accTypeform,
         'msg1': msg1,
 
     }
@@ -178,6 +191,7 @@ def productinfo(request, productId):
     }
     return render(request, 'productinfo.html', context)
 
+
 def requestinfo(request, requestId):
     list = requestMedi.objects.get(id=requestId)
     locations = list.username.location_set.all()
@@ -225,38 +239,72 @@ def editproductBackend(request, productId):
 
 @login_required(login_url='/medicine/sign/')
 def Registerinfo(request):
-    locForm = ''
-    if user_info.objects.filter(username=request.user).exists():
-        form = userInfoForm(instance=user_info.objects.get(username=request.user))
-        users =request.user
-    else:
-        form = userInfoForm()
-        locForm = locationForm()
-        users = ''
-        if request.method == 'POST':
-            form = userInfoForm(request.POST)
-            locForm = locationForm(request.POST)
-            if form.is_valid() & locForm.is_valid():
-                userInfo = user_info()
-                locInof = location()
-                userInfo.username = request.user
-                userInfo.pharmacyName = form.cleaned_data['pharmacyName']
-                userInfo.accType = form.cleaned_data['accType']
-                userInfo.phone_number = form.cleaned_data['phone_number']
-                userInfo.facebookPage = form.cleaned_data['facebookPage']
-                userInfo.whatsappNumber = form.cleaned_data['whatsappNumber']
-                userInfo.save()
+    userType = user_info.objects.get(username=request.user)
+    form = ''
+    msg = ''
+    locForm = locationForm
+    print(userType.accType)
+    if userType.accType == 'ph':
+        form = PharmacyAccForm()
+        msg = 'إذا كان لدى الصيدلية أكثر من فرع الرجاء إضافته لاحقاً'
+        AccType = pharmacyAcc()
+    elif userType.accType == 'or':
+        form = organizationAccForm()
+        AccType = organizationAcc()
+    elif userType.accType == 'no':
+        form = CustomerAccForm()
+        AccType = CustomerAcc()
 
-                locInof.username = request.user
-                locInof.city = locForm.cleaned_data['city']
-                locInof.location = locForm.cleaned_data['location']
-                locInof.save()
-                return redirect('profile')
+    if request.method == 'POST':
+        locForm = locationForm(request.POST)
+        if userType.accType == 'ph':
+            pharmacyForm = PharmacyAccForm(request.POST, request.FILES)
+
+            if pharmacyForm.is_valid():
+
+                try:
+                    AccType.username = request.user
+                    AccType.pharmacyName = pharmacyForm.cleaned_data['pharmacyName']
+                    AccType.phone_number = pharmacyForm.cleaned_data['phone_number']
+                    AccType.facebookPage = pharmacyForm.cleaned_data['facebookPage']
+                    AccType.whatsappNumber = pharmacyForm.cleaned_data['whatsappNumber']
+                    AccType.licenseImg = pharmacyForm.cleaned_data['licenseImg']
+                    AccType.licenseNumber = pharmacyForm.cleaned_data['licenseNumber']
+                    AccType.save()
+                    return redirect('profile')
+
+                except:
+                    return HttpResponse('error')
+
+
+        elif userType.accType == 'or':
+            form = organizationAccForm(request.POST)
+            if form.is_valid():
+                AccType.username = request.user
+                AccType.phone_number = form.cleaned_data['phone_number']
+                AccType.whatsappNumber = form.cleaned_data['whatsappNumber']
+                AccType.facebookPage = form.cleaned_data['facebookPage']
+                AccType.save()
+
+        elif userType.accType == 'no':
+            form = CustomerAccForm(request.POST)
+            if form.is_valid():
+                AccType.username = request.user
+                AccType.phone_number = form.cleaned_data['phone_number']
+                AccType.save()
+
+        if locForm.is_valid():
+            loc = location()
+            loc.username = request.user
+            loc.city = locForm.cleaned_data['city']
+            loc.location = locForm.cleaned_data['location']
+            loc.locUrl = locForm.cleaned_data['locUrl']
+            loc.save()
 
     context = {
         'form': form,
         'locForm': locForm,
-        'users': users,
+        'msg': msg,
     }
     return render(request, 'infoRegister.html', context)
 
@@ -270,8 +318,16 @@ def logout_backend(request):
 @login_required(login_url='/medicine/sign/')
 def profile(request):
     if user_info.objects.filter(username=request.user).exists():
+        user_infos = ''
         user = get_object_or_404(User, username=request.user)
-        user_infos = get_object_or_404(user_info, username=request.user)
+        userType = get_object_or_404(user_info, username= request.user)
+        if userType.accType == 'ph':
+            user_infos = get_object_or_404(pharmacyAcc, username=request.user)
+        elif userType.accType == 'or':
+            user_infos = get_object_or_404(organizationAcc, username=request.user)
+        elif userType.accType == 'no':
+            user_infos = get_object_or_404(CustomerAcc, username=request.user)
+
         medicines = user.storage_set.all()
 
         myFilter = OrderFilter(request.GET, queryset=medicines)
@@ -286,9 +342,19 @@ def profile(request):
     else:
         return redirect('infoRegister')
 
+
 def visitorProfile(request, phUrl):
-    user_infos = get_object_or_404(user_info, username__id=phUrl)
+    user_infos = ''
     user = get_object_or_404(User, id=phUrl)
+    userType = get_object_or_404(user_info, username=phUrl)
+    print(userType.accType)
+    if userType.accType == 'ph':
+        user_infos = get_object_or_404(pharmacyAcc, username__id=phUrl)
+        print(user_infos.pharmacyName)
+    elif userType.accType == 'or':
+        user_infos = get_object_or_404(organizationAcc, username__id=phUrl)
+    elif userType.accType == 'no':
+        user_infos = get_object_or_404(CustomerAcc, username__id=phUrl)
 
     medicines = user.storage_set.all()
 
@@ -311,7 +377,6 @@ def add_to_storage(request):
             storages = storage()
             storages.username = request.user
             storages.medicine = storageForm.cleaned_data['medicine']
-            storages.dose = storageForm.cleaned_data['dose']
             storages.price = storageForm.cleaned_data['price']
             storages.is_Available = True
 
@@ -386,9 +451,11 @@ def requestList(request):
     }
     return render(request, 'allRequest.html', context)
 
+
 def searchRequest(request):
     searchword = request.GET['search']
-    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='request').order_by('medicineGeneral', '-requestDate').all()
+    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='request').order_by(
+        'medicineGeneral', '-requestDate').all()
 
     if searchresult.exists():
         msg = ""
@@ -401,6 +468,7 @@ def searchRequest(request):
     }
     return render(request, 'allRequest.html', context)
 
+
 def donateList(request):
     list = requestMedi.objects.all().order_by('requestDate').filter(type='donate')
     context = {
@@ -408,9 +476,11 @@ def donateList(request):
     }
     return render(request, 'alldonate.html', context)
 
+
 def searchdonate(request):
     searchword = request.GET['search']
-    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='donate').order_by('medicineGeneral', '-requestDate').all()
+    searchresult = requestMedi.objects.filter(medicineGeneral__icontains=searchword, type='donate').order_by(
+        'medicineGeneral', '-requestDate').all()
 
     if searchresult.exists():
         msg = ""
@@ -423,9 +493,10 @@ def searchdonate(request):
     }
     return render(request, 'alldonate.html', context)
 
+
 def addBranch(request):
     forms = addBranchForm()
-    msg =''
+    msg = ''
     if request.method == 'POST':
         forms = addBranchForm(request.POST)
         if forms.is_valid():

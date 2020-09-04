@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import medicine, storage, user_info, location, requestMedi
+from .models import medicine, storage, user_info, location, requestMedi, pharmacyAcc, CustomerAcc, organizationAcc
 
 
 class medicineForm(forms.ModelForm):
@@ -38,17 +38,19 @@ class medicineForm(forms.ModelForm):
 class locationForm(forms.ModelForm):
     class Meta:
         model = location
-        fields = ['city', 'location']
+        fields = ['city', 'location', 'locUrl']
         exelude = ['username']
 
         labels = {
             'location': '',
             'city': '',
+            'locUrl': '',
         }
 
         widgets = {
             'location': forms.TextInput(attrs={'class': 'form-control col-md-12 mb-3', 'placeholder': 'الموقع'}),
             'city': forms.TextInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'المدينة'}),
+            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط موقع الصيدلية من برنامج خرائط جوجل'}),
         }
 
 
@@ -60,13 +62,11 @@ class addToStorageForm(forms.ModelForm):
 
         labels = {
             'price': '',
-            'dose': '',
             'medicine': '',
         }
         widgets = {
             'medicine': forms.Select(attrs={'class': 'form-control col-md-3'}),
-            'price': forms.TextInput(attrs={'class': 'form-control col-md-3 mb-3', 'placeholder': 'السعر'}),
-            'dose': forms.TextInput(attrs={'class': 'form-control col-md-3', 'placeholder': 'التركيز (مثال 500 mg )'}),
+            'price': forms.TextInput(attrs={'class': 'form-control col-md-3 mb-3', 'placeholder': 'السعر(إختياري)'}),
         }
 
 
@@ -92,32 +92,79 @@ class editStorageForm(forms.ModelForm):
 class userInfoForm(forms.ModelForm):
     class Meta:
         model = user_info
-        fields = ['accType', 'pharmacyName', 'phone_number',
-                  'whatsappNumber', 'facebookPage', 'description']
+        fields = ['accType']
+        exclude = ['username']
+        labels = {
+            'accType': '',
+        }
+
+        widgets = {
+            'accType': forms.RadioSelect(
+                attrs={'class': 'col-md-12', 'style': 'margin-top:10px;', 'onclick': 'javascript:AccTypeCheck()'}),
+        }
+
+
+
+class PharmacyAccForm(forms.ModelForm):
+    class Meta:
+        model = pharmacyAcc
+        fields = ['pharmacyName', 'phone_number',
+                  'whatsappNumber', 'facebookPage', 'licenseNumber', 'licenseImg']
         exclude = ['username']
         labels = {
             'pharmacyName': '',
             'phone_number': '',
-            'accType': '',
             'facebookPage': '',
             'whatsappNumber': '',
-            'description': ''
+            'licenseImg': 'صورة من ترخيص الصيدلية',
+            'licenseNumber': '',
         }
 
         widgets = {
             'pharmacyName': forms.TextInput(attrs={'class': 'form-control',
-                                                   'placeholder': 'إسم الصيدلية أو المبادرة',
-                                                   'style': 'display:none;',}),
-            'description': forms.TextInput(attrs={'class': 'form-control',
-                                                   'placeholder': 'نبذة عن الصيدلية ( اختياري )',
-                                                   'style': 'display:none;', }),
-            'accType': forms.RadioSelect(
-                attrs={'class': 'col-md-12 text-center', 'style': 'margin-top:0;', 'onclick': 'javascript:AccTypeCheck()'}),
+                                                   'placeholder': 'إسم الصيدلية',}),
+            'licenseNumber': forms.TextInput(attrs={'class': 'form-control',
+                                                   'placeholder': 'رقم الترخيص',}),
             'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الجوال (249xxxxxxxxx)'}),
             'facebookPage': forms.URLInput(attrs={'class': 'form-control',
-                                                  'placeholder': 'رابط صفحة الفيسبوك',
-                                                  'style': 'display:none;'}),
+                                                  'placeholder': 'رابط صفحة الفيسبوك',}),
             'whatsappNumber': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الواتس أب (249xxxxxxxxx)'}),
+        }
+
+class CustomerAccForm(forms.ModelForm):
+    class Meta:
+        model = CustomerAcc
+        fields = ['phone_number']
+        exclude = ['username']
+        labels = {
+            'phone_number': '',
+        }
+
+        widgets = {
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الجوال (249xxxxxxxxx)'}),
+        }
+
+
+class organizationAccForm(forms.ModelForm):
+    class Meta:
+        model = organizationAcc
+        fields = ['organizationName', 'phone_number', 'whatsappNumber', 'facebookPage']
+        exclude = ['username']
+        labels = {
+            'organizationName': '',
+            'phone_number': '',
+            'facebookPage': '',
+            'whatsappNumber': '',
+        }
+
+        widgets = {
+            'organizationName': forms.TextInput(attrs={'class': 'form-control',
+                                                   'placeholder': 'إسم المبادرة',}),
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الجوال (249xxxxxxxxx)'}),
+            'facebookPage': forms.URLInput(attrs={'class': 'form-control',
+                                                  'placeholder': 'رابط صفحة الفيسبوك',}),
+            'whatsappNumber': forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 'رقم الواتس أب (249xxxxxxxxx)'}),
 
         }
 
@@ -217,14 +264,16 @@ class contactForm(forms.Form):
 class addBranchForm(forms.ModelForm):
     class Meta:
         model = location
-        fields = ['city', 'location']
+        fields = ['city', 'location', 'locUrl']
         exclude = ['username']
 
         labels = {
             'city': '',
             'location': '',
+            'locUrl': '',
         }
         widgets = {
             'city': forms.TextInput(attrs={'class': 'form-control col-md-6 mb-3', 'placeholder': 'المدينة'}),
             'location': forms.TextInput(attrs={'class': 'form-control col-md-6', 'placeholder': 'الموقع'}),
+            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط موقع الصيدلية من برنامج خرائط جوجل'}),
         }

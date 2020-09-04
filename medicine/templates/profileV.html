@@ -7,13 +7,14 @@
                     <div class="p-3">
                         <div class="row">
                             <div class="col-md text-right pt-4 ml-auto mr-auto">
-                                {% if user.accType == 'ph' %} {% if 'صيدلية' in user.pharmacyName or 'صيدليه' in user.pharmacyName %}
+
+                                {% if user.username.user_info.accType == 'ph' %} {% if 'صيدلية' in user.pharmacyName or 'صيدليه' in user.pharmacyName %}
                                 <h4>{{user.pharmacyName}}</h4>
                                 {% else %}
                                 <h4>صيدلية {{user.pharmacyName}}</h4>
-                                {% endif%} {% elif user.accType == 'or' %}
+                                {% endif%} {% elif user.username.user_info.accType == 'or' %}
                                 <h4>
-                                    <span style="color: #0f0f0fff;">مبادرة</span> {{user.pharmacyName}}
+                                    <span style="color: #0f0f0fff;">مبادرة</span> {{user.organizationName}}
                                 </h4>
                                 {% else %}
                                 <h4>
@@ -23,7 +24,7 @@
                                 <h6 class="mt-3">
                                     <SPan>الموقع :</SPan>
                                     {% for loc in user.username.location_set.all %}
-                                    <i class="fas fa-map-marker-alt"></i> {% if user.accType == 'ph' %}الفرع</span>{{ forloop.counter }}
+                                    <i class="fas fa-map-marker-alt"></i> {% if user.username.user_info.accType == 'ph' %}الفرع</span>{{ forloop.counter }}
                                     <span>:</span>  {% endif %} {{loc.city}}, {{loc.location}} <br />{% endfor %}
                                 </h6>
                                 <h6><span>طرق التواصل</span></h6>
@@ -54,12 +55,12 @@
                 </div>
             </div>
 
-            {% if user.accType != 'no' %}
+            {% if user.username.user_info.accType != 'no' %}
 
             <div class="pt-4">
                 <div class="listofstorage text-center medicine-short-detail ml-auto mr-auto">
                     <h3 class="pt-3 pb-3">
-                        الآدوية المتوفرة {% if user.accType == 'ph' %} في الصيدلية {% elif user.accType == 'or' %} في المبادرة {% elif user.accType == 'or' %} عند {{user.username.first_name} {% endif %}
+                        الآدوية المتوفرة {% if user.username.user_info.accType == 'ph' %} في الصيدلية {% elif user.username.user_info.accType == 'or' %} في المبادرة {% endif %}
                     </h3>
                     <div class="container">
                         <div class="row">
@@ -76,15 +77,10 @@
                                             <div class="col-md-9 text-right">
                                                 <h4>{{storage.medicine.generalName}}</h4>
                                                 <h5>{{storage.medicine.scientificName}}</h5>
-                                                <h6><span>التركيز </span> : {{storage.dose}}</h6>
                                                 <h6>
                                                     <span>أخر تحديث :</span>
                                                     <span style="color: #0d0;">
                             {{storage.updateDate | naturalday}}</span>
-                                                </h6>
-                                                <h6>
-                                                    <span>السعر : </span>{{storage.price}}
-                                                    <span> جنيه </span>
                                                 </h6>
                                             </div>
                                         </div>

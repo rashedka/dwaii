@@ -18,12 +18,12 @@
                                 <h3 style="text-transform: capitalize;">{{medicine.medicine.scientificName}}</h3>
                                 <a href="{% url 'visitProfile' medicine.username.id %}">
                                     {% if info.accType == 'ph' %}
-                                    {% if 'صيدلية' in info.pharmacyName or 'صيدليه' in info.pharmacyName %}
-                                    <h6>{{info.pharmacyName}}</h6>
+                                    {% if 'صيدلية' in info.username.pharmacyacc.pharmacyName or 'صيدليه' in info.username.pharmacyacc.pharmacyName %}
+                                    <h6>{{info.username.pharmacyacc.pharmacyName}}</h6>
                                     {% else %}
-                                    <h6><span>صيدلية : </span>{{info.pharmacyName}}</h6>
+                                    <h6><span>صيدلية : </span>{{info.username.pharmacyacc.pharmacyName}}</h6>
                                     {% endif%} {% elif info.accType == 'or' %}
-                                    <h6><span>مبادرة : </span>{{info.pharmacyName}}</h6>
+                                    <h6><span>مبادرة : </span>{{info.username.organizationacc.organizationName}}</h6>
                                     {% else %}
                                     <h6>{{info.username.first_name}} {{info.username.last_name}}</h6>
                                  {% endif %}</a>

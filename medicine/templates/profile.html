@@ -8,20 +8,20 @@
                     <div class="p-3">
                         <div class="row">
                             <div class="col-md text-right pt-4 ml-auto mr-auto">
-                                {% if user.accType == 'ph' %} {% if 'صيدلية' in user.pharmacyName or 'صيدليه' in user.pharmacyName %}
+                                {% if user.username.user_info.accType == 'ph' %} {% if 'صيدلية' in user.pharmacyName or 'صيدليه' in user.pharmacyName %}
                                 <h4>{{user.pharmacyName}}</h4>
                                 {% else %}
                                 <h4>صيدلية {{user.pharmacyName}}</h4>
-                                {% endif%} {% elif user.accType == 'or' %}
-                                <h4><span style="color:#0f0f0fff">مبادرة</span> {{user.pharmacyName}}</h4>
+                                {% endif%} {% elif user.username.user_info.accType == 'or' %}
+                                <h4><span style="color:#0f0f0fff">مبادرة</span> {{user.organizationName}}</h4>
                                 {% else %}
                                 <h4>{{user.username.first_name|upper}} {{user.username.last_name |upper}}</h4>
                                 {% endif %}
-                                <h6><span>الموقع : </span> <br> {% for loc in user.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> <span>{% if user.accType == 'ph' %}الفرع</span>{{ forloop.counter }}
+                                <h6><span>الموقع : </span> <br> {% for loc in user.username.location_set.all %} <i class="fas fa-map-marker-alt"></i> <span>{% if user.username.user_info.accType == 'ph' %}الفرع</span>{{ forloop.counter }}
                                     <span>:  {% endif %} </span> {{loc.city}}, {{loc.location}} <br>{% endfor %}
-                                    {% if user.accType == 'ph' %}<span> <a href="{% url 'addBranch' %}">إضافة فرع</a>
+                                    {% if user.username.user_info.accType == 'ph' %}<span> <a href="{% url 'addBranch' %}">إضافة فرع</a>
                                     </span> {% endif %} </h6>
-                                {% if user.accType == 'ph' %} {% endif %}
+                                {% if user.username.user_info.accType == 'ph' %} {% endif %}
                                 <h6><span>طرق التواصل</span></h6>
                                 {{ section.title }}
                                 <div class="socialMedia text-center">
@@ -46,13 +46,12 @@
 
             <div class="pt-4">
                 <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                    <h3 class="pt-3 pb-3"> قائمة الآدوية {% if user.accType == 'ph' %} المتوفرة في الصيدلية {% elif user.accType == 'or' %} المتوفرة في المبادرة {% elif user.accType == 'no' %} المطلوبة / المتبرع بيها{% endif %}</h3>
+                    <h3 class="pt-3 pb-3"> قائمة الآدوية {% if user.username.user_info.accType == 'ph' %} المتوفرة في الصيدلية {% elif user.username.user_info.accType == 'or' %} المتوفرة في المبادرة {% elif user.username.user_info.accType == 'no' %} المطلوبة / المتبرع بيها{% endif %}</h3>
                     <div class="table-responsive">
-                        {% if user.accType != 'no' %}
+                        {% if user.username.user_info.accType != 'no' %}
                         <h4 class="bu"><a style="color: #000 !important" href="{% url 'add_to_storage' %}"><span>إضافة
-                                    دواء الى </span> {% if user.accType == 'ph' %} الصيدلية
-                                {% elif user.accType == 'or' %} المبادرة {% elif user.accType == 've' %} الأدوية
-                                المعروضة للبيع {% endif %}</a></h4>
+                                    دواء الى </span> {% if user.username.user_info.accType == 'ph' %} الصيدلية
+                                {% elif user.username.user_info.accType == 'or' %} المبادرة {% endif %}</a></h4>
                         {% else%}
                         <h4 class="bu">
                             <a style="color: #000 !important" href="{% url 'requestMedicine' %}">تبرع / طلب دواء</a>
@@ -61,7 +60,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    {% if user.accType == 'no' %}
+                                    {% if user.username.user_info.accType == 'no' %}
                                     <th>#</th>
                                     <th scope="col">إسم الدواء</th>
                                     <th scope="col">تاريخ الطلب</th>
@@ -72,14 +71,13 @@
                                     <th scope="col">إسم الدواء</th>
                                     <th scope="col">الإسم العلمي</th>
                                     <th scope="col">السعر</th>
-                                    <th scope="col">التركيز</th>
                                     <th scope="col">الحالة</th>
                                     <th scope="col">تعديل</th>
                                     {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
-                                {% if user.accType == 'no' %} {% for med in user.username.requestmedi_set.all %}
+                                {% if user.username.user_info.accType == 'no' %} {% for med in user.username.requestmedi_set.all %}
                                 <tr>
                                     <th>{{ forloop.counter }}</th>
                                     <td>{{med.medicineGeneral}}</td>
@@ -93,8 +91,11 @@
                                     <th>{{ forloop.counter }}</th>
                                     <td>{{med.medicine.generalName}}</td>
                                     <td>{{med.medicine.scientificName}}</td>
+                                    {% if med.price is none %}
+                                    <td>السعر غير متوفر</td>
+                                    {% else %}
                                     <td>{{med.price}} جنيه</td>
-                                    <td>{{med.dose}}</td>
+                                    {% endif %}
                                     {% if med.is_Available%}
                                     <td>متوفر</td>
                                     {% else %}

@@ -25,17 +25,17 @@
                             <div class="col-md-9 text-right">
                                 <h4>{{storage.medicine.generalName}}</h4>
                                 <h5>{{storage.medicine.scientificName}}</h5>
-                                {% if storage.username.user_info.accType == 'ph' %} {% if 'صيدلية' in storage.username.user_info.pharmacyName or 'صيدليه' in storage.username.user_info.pharmacyName %}
-                                <h6><a href="{% url 'visitProfile' storage.username.id %}" style="color: #26317d">{{storage.username.user_info.pharmacyName}}</a>
+                                {% if storage.username.user_info.accType == 'ph' %} {% if 'صيدلية' in storage.username.pharmacyacc.pharmacyName or 'صيدليه' in storage.username.pharmacyacc.pharmacyName %}
+                                <h6><a href="{% url 'visitProfile' storage.username.id %}" style="color: #26317d">{{storage.username.pharmacyacc.pharmacyName}}</a>
                                 </h6>
                                 {% else %}
                                 <h6><a href="{% url 'visitProfile' storage.username.id %}">صيدلية
-                                        {{storage.username.user_info.pharmacyName}}</a></h6>
-                                {% endif%} {% elif storage.username.user_info.accType == 'or' %}
+                                        {{storage.username.pharmacyacc.pharmacyName}}</a></h6>
+                                {% endif%} {% elif storage.username.pharmacyAcc.accType == 'or' %}
                                 <h6>
                                     <a href="{% url 'visitProfile' storage.username.id %}"><span
                                             style="color: #0f0f0fff;">مبادرة</span>
-                                        {{storage.username.user_info.pharmacyName}}</a>
+                                        {{storage.username.organizationacc.organizationName}}</a>
                                 </h6>
                                 {% else %}
                                 <h6>
@@ -43,10 +43,8 @@
                                         {{storage.username.last_name |upper}}</a>
                                 </h6>
                                 {% endif %}
-                                <h6><span>التركيز </span> : {{storage.dose}}</h6>
                                 <h6><span>أخر تحديث :</span> <span style="color:#0d0">
                                         {{storage.updateDate | naturalday}}</span></h6>
-                                <h6><span>السعر : </span>{{storage.price}} <span> جنيه </span></h6>
                                 <h6><span>الموقع :</span><span> {% for loc in storage.username.location_set.all %}
                                     <i class="fas fa-map-marker-alt"></i>
                                         {{loc.city}},
