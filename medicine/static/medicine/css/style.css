@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+p {
+    margin-right: 10px;
+}
+
 a {
     text-decoration: none!important;
 }

@@ -1,0 +1,45 @@
+{% extends 'index.html'%}
+
+{% block javaScriptHeader %}
+<script>
+    $(document).ready(function() {
+        $('#id_medicine').select2();        
+    })
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="p-5">
+                <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                    <form style=" text-align: right;" method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h3 style=" text-align: center;"><span>تعديل معلومات الدواء</span></h3>
+                        <h5>المهم يا جماعة اذا ما عرفتو تصنيف الدواء اكتبو أي شئ بنعدلها لقدام و ترجمو الأسماء للعربي و أهم شئ الصور باللّه اذا لقيت محل الصورة مكتوب profile معناتها لسه الصورة ما اتصلحت و اذا لقيت مكتوب اي إسم تاني معناتها في صورة و الدواء ما محتاج ل شئ </h5>
+                        <h6><span>الإسم التجاري : </span><span style="font-size: 20px;">{{med.generalName}}</span></h6>
+                        <h6><span>الإسم العلمي : </span> {{med.scientificName}} </h6>
+                        <h6><span>إسم الشركة المصنعة : </span><span style="font-size: 20px;">{{med.manufactureCompanyEn}}</span></h6>
+                        <h6><span>بلد التصنيع : </span><span style="font-size: 20px;">{{med.originCountry}}</span></h6>
+                        <h6>{{med.originCountry}}</h6>
+                        
+                        {{form}}
+                        {{msg}}
+                        <div class="checkbox mb-3">
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">إضافة</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+edit_medicine

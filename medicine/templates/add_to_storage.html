@@ -1,4 +1,15 @@
 {% extends 'index.html'%}
+
+{% block javaScriptHeader %}
+<script>
+    $(document).ready(function() {
+        $('#id_medicine').select2();   
+        $('#select2-data-1-qj0k').width('100%')     
+    })
+</script>
+
+{% endblock %}
+
 {% block content %}
 
 <section>
@@ -14,9 +25,10 @@
                                 الأدوية المعروضة للبيع {% endif %} </span>
                         </h3>
                         {{form.medicine.label}}
-                        {{form.medicine}} <a href="{% url 'addMedicine'%}">إضافة دواء غير موجود في القائمة</a>
+                        {{form.medicine}}
+                        <h6><a href="{% url 'addMedicine'%}">إضافة دواء غير موجود في القائمة</a></h6>
                         {{form.price}}
-                        {{form.dose}}
+
                         {{msg}}
                         <div class="checkbox mb-3">
                         </div>
@@ -30,14 +42,4 @@
 
 {% endblock %}
 
-{% block javaScript %}
-
-<script>
-    var accType = "{{ user.accType }}"
-    if (accType.includes('no') || accType.includes('or') ){
-        document.forms[0].price.value = 0
-        document.forms[0].price.hidden = true
-    }
-</script>
-
-{% endblock %}
+    

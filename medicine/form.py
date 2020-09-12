@@ -23,6 +23,8 @@ class medicineForm(forms.ModelForm):
                 attrs={'class': 'form-control col-md-3', 'placeholder': 'الاسم التجاري باللغة الإنجليزية'}),
             'scientificName': forms.TextInput(
                 attrs={'class': 'form-control col-md-3 mb-3', 'placeholder': 'الاسم العلمي'}),
+            'originCountry': forms.TextInput(
+                attrs={'class': 'form-control col-md-3', 'placeholder': 'بلد التصنيع'}),
             'arabicName': forms.TextInput(
                 attrs={'class': 'form-control col-md-3', 'placeholder': 'الاسم باللغة العربية'}),
             'manufactureCompanyAr': forms.TextInput(
@@ -31,7 +33,40 @@ class medicineForm(forms.ModelForm):
                 attrs={'class': 'form-control col-md-3', 'placeholder': 'الشركة المصنعة باللغة الإنجليزية'}),
             'category': forms.Select(attrs={'class': 'form-control col-md-3', 'style': 'margin:0 0 10px;'}),
             'type': forms.Select(attrs={'class': 'form-control col-md-3', 'style': 'margin:0 0 10px;'}),
+        }
 
+
+class medicineEditForm(forms.ModelForm):
+
+    class Meta:
+        model = medicine
+        fields = '__all__'
+        exclude = ['generalName', 'scientificName', 'originCountry', 'manufactureCompanyEn']
+        labels = {
+            'generalName': 'الإسم التجاري بالإنجليزي',
+            'arabicName': 'الإسم التجاري بالعربي',
+            'scientificName': 'الإسم العلمي',
+            'manufactureCompanyAr': 'الشركة المصنعة باللغة العربية',
+            'manufactureCompanyEn': 'الشركة المصنعة باللغة الإنجليزية',
+            'img': 'صورة الدواء :',
+            'type': 'نوع الدواء :',
+            'originCountry': 'بلد التصنيع',
+            'category': 'تصنيف الدواء :',
+        }
+        widgets = {
+            'generalName': forms.TextInput(attrs={'class': 'form-control col-md-3', 'placeholder': 'الاسم التجاري باللغة الإنجليزية', 'disabled': 'True'}),
+            'scientificName': forms.TextInput(
+                attrs={'class': 'form-control col-md-3 mb-3', 'placeholder': 'الاسم العلمي', 'disabled': 'True'}),
+            'arabicName': forms.TextInput(
+                attrs={'class': 'form-control col-md-3', 'placeholder': 'الاسم باللغة العربية'}),
+            'originCountry': forms.TextInput(
+                attrs={'class': 'form-control col-md-3', 'placeholder': 'بلد التصنيع', 'disabled': 'True'}),
+            'manufactureCompanyAr': forms.TextInput(
+                attrs={'class': 'form-control col-md-3', 'placeholder': 'الشركة المصنعة باللغة العربية'}),
+            'manufactureCompanyEn': forms.TextInput(
+                attrs={'class': 'form-control col-md-3', 'placeholder': 'الشركة المصنعة باللغة الإنجليزية', 'disabled': 'True'}),
+            'category': forms.Select(attrs={'class': 'form-control col-md-3', 'style': 'margin:0 0 10px;'}),
+            'type': forms.Select(attrs={'class': 'form-control col-md-3', 'style': 'margin:0 0 10px;'}),
         }
 
 
@@ -50,7 +85,7 @@ class locationForm(forms.ModelForm):
         widgets = {
             'location': forms.TextInput(attrs={'class': 'form-control col-md-12 mb-3', 'placeholder': 'الموقع'}),
             'city': forms.TextInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'المدينة'}),
-            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط موقع الصيدلية من برنامج خرائط جوجل'}),
+            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط الموقع من برنامج خرائط جوجل'}),
         }
 
 
@@ -65,7 +100,7 @@ class addToStorageForm(forms.ModelForm):
             'medicine': '',
         }
         widgets = {
-            'medicine': forms.Select(attrs={'class': 'form-control col-md-3'}),
+            'medicine': forms.Select(attrs={'class': 'form-control col-md-12 col-12 mb-3', 'placeholder': 'الدواء'}),
             'price': forms.TextInput(attrs={'class': 'form-control col-md-3 mb-3', 'placeholder': 'السعر(إختياري)'}),
         }
 
@@ -95,12 +130,12 @@ class userInfoForm(forms.ModelForm):
         fields = ['accType']
         exclude = ['username']
         labels = {
-            'accType': '',
+            'accType': 'نوع الحساب',
         }
 
         widgets = {
             'accType': forms.RadioSelect(
-                attrs={'class': 'col-md-12', 'style': 'margin-top:10px;', 'onclick': 'javascript:AccTypeCheck()'}),
+                attrs={'class': 'col-md-12  ', 'onclick': 'javascript:AccTypeCheck()'}),
         }
 
 
@@ -165,8 +200,46 @@ class organizationAccForm(forms.ModelForm):
                                                   'placeholder': 'رابط صفحة الفيسبوك',}),
             'whatsappNumber': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 'رقم الواتس أب (249xxxxxxxxx)'}),
-
         }
+
+
+class PharmacyAccEditForm(forms.ModelForm):
+    class Meta:
+        model = pharmacyAcc
+        fields = ['whatsappNumber', 'facebookPage', 'phone_number']
+        exclude = ['username', 'pharmacyName', 'licenseNumber', 'licenseImg']
+        labels = {
+            'phone_number': '',
+            'facebookPage': '',
+            'whatsappNumber': '',
+        }
+
+        widgets = {
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الجوال (249xxxxxxxxx)'}),
+            'facebookPage': forms.URLInput(attrs={'class': 'form-control',
+                                                  'placeholder': 'رابط صفحة الفيسبوك',}),
+            'whatsappNumber': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الواتس أب (249xxxxxxxxx)'}),
+        }
+
+class organizationAccEditForm(forms.ModelForm):
+    class Meta:
+        model = organizationAcc
+        fields = ['phone_number', 'whatsappNumber', 'facebookPage']
+        exclude = ['username', 'organizationName']
+        labels = {
+            'phone_number': '',
+            'facebookPage': '',
+            'whatsappNumber': '',
+        }
+
+        widgets = {
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'رقم الجوال (249xxxxxxxxx)'}),
+            'facebookPage': forms.URLInput(attrs={'class': 'form-control',
+                                                  'placeholder': 'رابط صفحة الفيسبوك',}),
+            'whatsappNumber': forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 'رقم الواتس أب (249xxxxxxxxx)'}),
+        }
+
 
 
 class loginForm(forms.Form):
@@ -275,5 +348,5 @@ class addBranchForm(forms.ModelForm):
         widgets = {
             'city': forms.TextInput(attrs={'class': 'form-control col-md-6 mb-3', 'placeholder': 'المدينة'}),
             'location': forms.TextInput(attrs={'class': 'form-control col-md-6', 'placeholder': 'الموقع'}),
-            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط موقع الصيدلية من برنامج خرائط جوجل'}),
+            'locUrl': forms.URLInput(attrs={'class': 'form-control col-md-12', 'placeholder': 'رابط الموقع من برنامج خرائط جوجل'}),
         }

@@ -58,7 +58,7 @@ ROOT_URLCONF = 'dwaii.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,6 +84,9 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
+        'OPTIONS': {
+          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -144,3 +147,8 @@ PWA_APP_DESCRIPTION = "موقع يساعد المرضى على الوصول ال
 PWA_APP_BACKGROUND_COLOR = '#000000'
 PWA_APP_THEME_COLOR = '#0A0302'
 
+# SECURITY SETTINGS
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'

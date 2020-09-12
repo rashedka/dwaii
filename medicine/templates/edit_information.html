@@ -10,13 +10,7 @@
                             <form class="form-signin" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{form}}
-                                <div id="locationInfo">
-                                    <h6 class="mt-2">العنوان</h6>
-                                {{locForm}}
-                                <p><a href="https://youtu.be/1dx5THzb1Yg?t=71" style="color: #260ffd;"> أضغط هنا لمعرفة طريقة الحصول على الرابط من خرائط جوجل</a></p>
 
-                                    {{mag}}
-                                </div>
                                 <div class="checkbox mb-3"></div>
                                 <button class="btn btn-lg btn-primary btn-block" type="submit">تسجيل</button>
                             </form>
@@ -28,6 +22,6 @@
     </div>
 </section>
 
-{% endblock %} 
+{% endblock %}
 
 <script type="text/javascript">

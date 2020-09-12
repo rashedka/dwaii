@@ -13,7 +13,8 @@ from django.conf import settings
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users
 from .form import medicineForm, userInfoForm, addToStorageForm, editStorageForm, loginForm, requestMedForm, \
-    registerForm, locationForm, contactForm, addBranchForm, organizationAccForm, CustomerAccForm, PharmacyAccForm
+    registerForm, locationForm, contactForm, addBranchForm, organizationAccForm, CustomerAccForm, PharmacyAccForm, \
+    PharmacyAccEditForm, organizationAccEditForm, medicineEditForm
 from django.db.models import Q
 
 
@@ -51,9 +52,11 @@ def contact(request):
 def index(request):
     user_infos = user_info.objects.all().count() - 3
     medicines = medicine.objects.all().count()
+    medi = medicine.objects.all()
     quantity = storage.objects.all().count()
     context = {
         'user_info': user_infos,
+        'medicines': medi,
         'medicine': medicines,
         'quantity': quantity,
     }
@@ -69,26 +72,39 @@ def index(request):
 
 @unauthenticated_user
 def sign(request):
-    form = loginForm()
-    formRegister = registerForm()
-    accTypeform = userInfoForm()
-
-    msg1 = ''
     if request.method == 'POST':
-        form = loginForm(request.POST)
-        formRegister = registerForm(request.POST)
-        accTypeform = userInfoForm(request.POST)
+        loginform = loginForm(request.POST)
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        if loginform.is_valid():
+            username = loginform.cleaned_data['username']
+            password = loginform.cleaned_data['password']
             result = authenticate(username=username, password=password)
             if result is not None:
                 login(request, result)
                 return redirect(profile)
             else:
                 msg1 = 'يوجد خطأ في إسم المستخدم أو كلمة السر'
-        elif formRegister.is_valid() and accTypeform.is_valid():
+        else:
+            msg1 = 'الرجاء التأكد من المعلومات'
+    else:
+        loginform = loginForm()
+        msg1 = ''
+
+    context = {
+        'form': loginform,
+        'msg1': msg1,
+    }
+    return render(request, 'sign.html', context)
+
+
+
+@unauthenticated_user
+def signup(request):
+    if request.method == 'POST':
+        formRegister = registerForm(request.POST)
+        accTypeform = userInfoForm(request.POST)
+
+        if formRegister.is_valid() and accTypeform.is_valid():
             userInfo = user_info()
             username = formRegister.cleaned_data['username2']
             password = formRegister.cleaned_data['password1']
@@ -108,15 +124,15 @@ def sign(request):
                 userInfo.accType = accTypeform.cleaned_data['accType']
                 userInfo.save()
                 return redirect('infoRegister')
+    else:
+        formRegister = registerForm()
+        accTypeform = userInfoForm()
 
     context = {
-        'form': form,
-        'formRegister': formRegister,
+        'form': formRegister,
         'accTypeform': accTypeform,
-        'msg1': msg1,
-
     }
-    return render(request, 'sign.html', context)
+    return render(request, 'signup.html', context)
 
 
 def allMedicine(request):
@@ -238,6 +254,43 @@ def editproductBackend(request, productId):
 
 
 @login_required(login_url='/medicine/sign/')
+def Editinfo(request):
+    userType = user_info.objects.get(username=request.user)
+    if userType.accType == 'ph':
+        ins = get_object_or_404(pharmacyAcc, username=request.user)
+        form = PharmacyAccEditForm(instance=ins)
+        msg = 'إذا كان لدى الصيدلية أكثر من فرع الرجاء إضافته لاحقاً'
+    elif userType.accType == 'or':
+        ins = get_object_or_404(organizationAcc, username=request.user)
+        form = organizationAccEditForm(instance=ins)
+    elif userType.accType == 'no':
+        ins = get_object_or_404(CustomerAcc, username=request.user)
+        form = CustomerAccForm(instance=ins)
+
+    if request.method == 'POST':
+        if userType.accType == 'ph':
+            ins = get_object_or_404(pharmacyAcc, username=request.user)
+            form = PharmacyAccEditForm(request.POST, instance=ins)
+            form.save()
+            return redirect('profile')
+        elif userType.accType == 'or':
+            ins = get_object_or_404(organizationAcc, username=request.user)
+            form = organizationAccEditForm(request.POST, instance=ins)
+            form.save()
+            return redirect('profile')
+        elif userType.accType == 'no':
+            ins = get_object_or_404(CustomerAcc, username=request.user)
+            form = CustomerAccForm(request.POST, instance=ins)
+            form.save()
+            return redirect('profile')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'edit_information.html', context)
+
+@login_required(login_url='/medicine/sign/')
 def Registerinfo(request):
     userType = user_info.objects.get(username=request.user)
     form = ''
@@ -285,6 +338,7 @@ def Registerinfo(request):
                 AccType.whatsappNumber = form.cleaned_data['whatsappNumber']
                 AccType.facebookPage = form.cleaned_data['facebookPage']
                 AccType.save()
+                return redirect('profile')
 
         elif userType.accType == 'no':
             form = CustomerAccForm(request.POST)
@@ -292,6 +346,7 @@ def Registerinfo(request):
                 AccType.username = request.user
                 AccType.phone_number = form.cleaned_data['phone_number']
                 AccType.save()
+                return redirect('profile')
 
         if locForm.is_valid():
             loc = location()
@@ -318,29 +373,56 @@ def logout_backend(request):
 @login_required(login_url='/medicine/sign/')
 def profile(request):
     if user_info.objects.filter(username=request.user).exists():
-        user_infos = ''
-        user = get_object_or_404(User, username=request.user)
-        userType = get_object_or_404(user_info, username= request.user)
-        if userType.accType == 'ph':
-            user_infos = get_object_or_404(pharmacyAcc, username=request.user)
-        elif userType.accType == 'or':
-            user_infos = get_object_or_404(organizationAcc, username=request.user)
-        elif userType.accType == 'no':
-            user_infos = get_object_or_404(CustomerAcc, username=request.user)
+        if checkdataBase(request ,pharmacyAcc) or checkdataBase(request ,organizationAcc) or checkdataBase(request ,CustomerAcc):
+            user_infos = ''
+            user = get_object_or_404(User, username=request.user)
+            userType = get_object_or_404(user_info, username= request.user)
+            if userType.accType == 'ph':
+                user_infos = get_object_or_404(pharmacyAcc, username=request.user)
+            elif userType.accType == 'or':
+                user_infos = get_object_or_404(organizationAcc, username=request.user)
+            elif userType.accType == 'no':
+                user_infos = get_object_or_404(CustomerAcc, username=request.user)
 
-        medicines = user.storage_set.all()
+            medicines = user.storage_set.all()
 
-        myFilter = OrderFilter(request.GET, queryset=medicines)
-        medicines = myFilter.qs
+            myFilter = OrderFilter(request.GET, queryset=medicines)
+            medicines = myFilter.qs
 
-        context = {
-            'medicine': medicines,
-            'user': user_infos,
-            'myFilter': myFilter,
-        }
-        return render(request, 'profile.html', context)
+            context = {
+                'medicine': medicines,
+                'user': user_infos,
+                'myFilter': myFilter,
+            }
+            return render(request, 'profile.html', context)
+        else:
+            return redirect('infoRegister')
+
+
+def checkdataBase(request, tableName):
+    existUser = tableName.objects.filter(username=request.user).exists()
+    return existUser
+
+
+
+
+def edit_medicine(request, medId):
+    if request.method == 'POST':
+        med = get_object_or_404(medicine, id=medId)
+        form = medicineEditForm(request.POST, request.FILES, instance=med)
+        if form.is_valid():
+            form.save()
+            return redirect('adminDash')
     else:
-        return redirect('infoRegister')
+        med = get_object_or_404(medicine, id=medId)
+        form = medicineEditForm(instance=med)
+
+    context = {
+        'form': form,
+        'med': med,
+    }
+
+    return render(request, 'edit_medicine.html', context)
 
 
 def visitorProfile(request, phUrl):
@@ -372,7 +454,7 @@ def add_to_storage(request):
     form = addToStorageForm()
     msg = ''
     if request.method == 'POST':
-        storageForm = addToStorageForm(request.POST, request.FILES)
+        storageForm = addToStorageForm(request.POST)
         if storageForm.is_valid():
             storages = storage()
             storages.username = request.user

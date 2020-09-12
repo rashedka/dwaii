@@ -5,7 +5,7 @@ from django.urls import path
 from medicine.views import search, allMedicine, sign, logout_backend, \
     profile, add_to_storage, productinfo, Registerinfo, editproduct, \
     editproductBackend, addMedicine, requestMedicine, requestList, visitorProfile, requestinfo, addBranch, \
-    searchRequest, searchdonate, donateList
+    searchRequest, searchdonate, donateList, Editinfo, edit_medicine, signup
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -13,12 +13,14 @@ urlpatterns = [
                   path('searchRequest', searchRequest, name='search'),
                   path('searchDonate', searchdonate, name='search'),
                   path('sign/', sign, name='sign'),
-                  path('', allMedicine, name='allMedicine'),                  
+                  path('signup/', signup, name='signup'),
+                  path('', allMedicine, name='allMedicine'),
                   path('requestList/', requestList, name='requestList'),
                   path('donateList/', donateList, name='donateList'),
                   path('request/add', requestMedicine, name='requestMedicine'),
                   path('profile/add_to_storage/', add_to_storage, name='add_to_storage'),
                   path('profile/addMedicine/', addMedicine, name='addMedicine'),
+                  path('profile/medicine/<int:medId>', edit_medicine, name='edit_medicine'),
                   path('profile/', profile, name='profile'),
                   path('profile/<int:phUrl>', visitorProfile, name='visitProfile'),
                   path('logout/', logout_backend, name='logout'),
@@ -28,6 +30,7 @@ urlpatterns = [
                   path('info/editBackend/<int:productId>', editproductBackend, name='editproductBackend'),
                   path('profile/inforegister', Registerinfo, name='infoRegister'),
                   path('profile/addBranch', addBranch, name='addBranch'),
+                  path('profile/edit_information', Editinfo, name='edit_information'),
 
                   # reset password
                   path('reset_password', auth_views.PasswordResetView.as_view(template_name= "resetPassword.html"), name='reset_password'),

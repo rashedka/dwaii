@@ -39,7 +39,8 @@
         </div>
         <div class="pt-4">
             <div class="listofstorage col-md-12 text-center medicine-short-detail ml-auto mr-auto">
-                <h3 class="pt-3 pb-3">أصناف الأدوية الموجودة</h3>
+                <h3 class="pt-3 pb-3">الأدوية اللي لازم نشتغلها + ما تشتغلو ب أول 195 دواء دواء</h3>
+                <h4>الأدوية اللي تشتغلها براها بتطلع من القائمة هنا</h4>
                 <div class="table-responsive">
                     <h4 class="bu"><a style="color: #000 !important" href="{% url 'addMedicine' %}">إضافة صنف دواء جديد</a></h4>
                     <table class="table table-hover">
@@ -48,15 +49,21 @@
                                 <th scope="col">#</th>
                                 <th scope="col">إسم الدواء</th>
                                 <th scope="col">الإسم العلمي</th>
+                                <th scope="col">بلد التصنيع</th>                                
+                                <th scope="col">تعديل</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for med in medicine %}
+                            {% if med.img == 'profile.png' %}
                             <tr>
-                                <th scope="row">{{med.id}}</th>
+                                <th scope="row">{{ forloop.counter }}</th>
                                 <td>{{med.generalName}}</td>
                                 <td>{{med.scientificName}}</td>
+                                <td>{{med.originCountry}}</td>
+                                <td><a href="{% url 'edit_medicine' med.id %}">تعديل</a></td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>

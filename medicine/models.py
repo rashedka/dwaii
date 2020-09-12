@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
+import os
 
 # Create your models here.
 
@@ -17,6 +19,12 @@ requestType = [
 ]
 
 
+def encodePath(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('license/', filename)
+
+
 class user_info(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
     accType = models.CharField(default='no', choices=accountType, max_length=3)
@@ -31,8 +39,8 @@ class pharmacyAcc(models.Model):
     facebookPage = models.URLField(max_length=200, null=True, blank=True)
     phone_number = models.BigIntegerField()
     whatsappNumber = models.BigIntegerField(null=True, blank=True)
-    licenseImg = models.ImageField(upload_to="license/", null=True, blank=True)
-    licenseNumber = models.CharField(max_length=30, null=True, blank=True)
+    licenseImg = models.ImageField(upload_to=encodePath)
+    licenseNumber = models.CharField(max_length=30)
 
 
 class CustomerAcc(models.Model):
@@ -74,7 +82,7 @@ class medicine(models.Model):
     category = models.ForeignKey(medCategory, on_delete=models.CASCADE, null=True, blank=True)
     manufactureCompanyAr = models.CharField(max_length=50, null=True, blank=True)
     manufactureCompanyEn = models.CharField(max_length=50)
-    img = models.ImageField(upload_to="medicine/", default="profile.png", null=True, blank=True)
+    img = models.ImageField(upload_to="medicine/", default="profile.png")
 
     def __str__(self):
         return self.generalName

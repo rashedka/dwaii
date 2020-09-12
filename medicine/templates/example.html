@@ -2,122 +2,70 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    <script data-ad-client="ca-pub-1818913905140371" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="موقع يساعد المرضى على الوصول الى معرفة أماكن توفر الأدوية بصورة أسرع من خلال البحث عن الدواء في محرك البحث الخاص بالموقع">
+    <meta name="keywords" content="أدوية، البحث عن دواء، متوفر وين، أدوية السودان، السودان، دوائي، وين القى">
+    <meta name="email" content="dwaiisudan@gmail.com">
     <title>Dwaii</title>
+    <link rel="canonical" href="https://www.dwaiisudan.com">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/medicine/css/style.css">
+    <link rel="stylesheet" href="{% static 'medicine/css/style.css'%}">
+    <link rel="icon" href="{% static 'medicine/img/dwaiiIcon.jpeg' %}">
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.selectmen').select2();
+        })
+    </script>
+
 </head>
 
 <body>
 
-    <header>
-        <div class="navbar navbar-dark shadow-sm">
-            <div class="container d-flex justify-content-between">
-                <div class="col-md-4 col-12 d-none d-md-block">
-                    <ul class="unorder-list">
-                        <li><a href="#">قائمة الأدوية</a></li>
-                        <li><a href="#">طلب دواء</a></li>
-                        <li><a href="#">إتصل بنا</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-5 col-12 text-center">
-                    <div class="ml-auto mr-auto">
-                        <img src="../static/medicine/img/logo.png" alt="" class="" style="height: 50px;">
-                        <span class="logo-text">دوائي</span>
+    <section>
+        <div class="container">
+            <div class="col-md-12">
+                <div class="p-5">
+                    <div class="profile col-md-12 text-center medicine-short-detail ml-auto mr-auto">
+                        <form style=" text-align: right;" method="post" action="" enctype="multipart/form-data">
+
+                            <select name="" class="selectmen">
+                                <option selected disabled="true">====== select medicine =========</option>
+                                <option value="">frsgfa</option>
+                                <option value="">fwaea</option>
+                                <option value="">feaWds</option>
+                                <option value="">ewfasedf</option>
+                                <option value="">afsasf</option>
+                                <option value="">sgdxsa</option>
+                                <option value="">fafda</option>
+                                <option value="">regs</option>
+                                <option value="">sgfas</option>
+                                <option value="">fewdssa</option>
+                            </select>
+                            {{msg}}
+                            <div class="checkbox mb-3">
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">إضافة</button>
+                        </form>
                     </div>
-                </div>
-                <div class="col-md-3 col-12 text-left d-none d-md-block">
-                    <ul class="unorder-list" style="float: left;">
-                        <li><a href="">دخول / تسجيل حساب</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
-    </header>
+    </section>
 
-    <div class="page">
-        <section>
-            <div class="container">
-                <div class="col-md-12">
-                    <div class="pt-5">
-                        <div class="productinfo col-md-12 text-center ml-auto mr-auto">
-                            <div class="m-2">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="image">
-                                            <img src="{{u.medicine.img.url}}" alt="noooo" height="200" width="200">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9 text-right detail">
-                                        <h4>{{u.medicine.generalName}}</h4>
-                                        <h6><span>الاسم العلمي : </span><span>{{u.medicine.scientificName}}</span></h6>
-                                        <h6><span>{{u.username}}</span></h6>
-                                        <h6><span>تاريخ اخر تعديل </span><span>:
-                                                {{u.updateDate | naturaltime}}</span></h6>
-                                        <h6><span>السعر : </span>{{u.price}} <span> جنيه </span></h6>
-                                        <h6>طرق التواصل</h6>
-                                        <ul class="unorder-list">
-                                            <li><a href="" style="color:black"><i style="font-size:34px" class="fa">&#xf095;</i></a></li>
-                                            <li><a href="" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px" class="fa">&#xf232;</i></a></li>
-                                            <li><a href=""><i style="font-size:34px" class="fa">&#xf230;</i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="productinfo col-md-12 text-center ml-auto mr-auto">
-                            <div class="m-2">
-                                <h4>أدوية ذات صلة</h4>
-                                <div class="row">
-                                    <div class="col-md text-right detail" style="border: 1px solid #000000; margin: 10px;">
-                                        <div class="image">
-                                            <img src="{{u.medicine.img.url}}" alt="noooo" height="200" width="200">
-                                        </div>
-                                        <h4>{{u.medicine.generalName}}</h4>
-                                        <h6><span>السعر : </span>{{u.price}} <span> جنيه </span></h6>
-                                        <h6>طرق التواصل</h6>
-                                        <ul class="unorder-list">
-                                            <li><a href="" style="color:black"><i style="font-size:34px" class="fa">&#xf095;</i></a></li>
-                                            <li><a href="" style="color:darkgreen; margin: 0 10px;"><i style="font-size:34px" class="fa">&#xf232;</i></a></li>
-                                            <li><a href=""><i style="font-size:34px" class="fa">&#xf230;</i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Footer -->
-
-
-        <footer class="page-footer font-small blue">
-
-            <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">جميع الحقوق محغوظة
-                <a href="https://mdbootstrap.com/">Kwemrj</a>
-            </div>
-            <!-- Copyright -->
-
-        </footer>
-        <!-- Footer -->
-    </div>
-
-
-
-
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>

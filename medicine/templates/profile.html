@@ -24,6 +24,8 @@
                                 {% if user.username.user_info.accType == 'ph' %} {% endif %}
                                 <h6><span>طرق التواصل</span></h6>
                                 {{ section.title }}
+                                <h6><a href="{% url 'edit_information' %}"><span><i style="font-size:24px"
+                                    class="fa">&#xf040;</i></span>تعديل معلومات التواصل</a></h6>
                                 <div class="socialMedia text-center">
                                     <ul class="unorder-list">
                                         {% if user.phone_number != null%}
@@ -38,6 +40,7 @@
                                         {% endif %}
                                     </ul>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

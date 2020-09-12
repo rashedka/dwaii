@@ -18,27 +18,10 @@
                                         {{form.password.errors }}
                                         {{msg1}}
                                         <p><a href="{% url 'reset_password' %}" style="color:#260ffd;">هل نسيت كلمة السر ؟ </a></p>
-
+                                        <p>ليس لديك حساب : <a href="{% url 'signup' %}" style="color:#260ffd;">تسجيل حساب جديد</a></p>
+                                        
                                         <div class="checkbox mb-3"></div>
-
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">دخول</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="signin-signup col-md-5 text-center m-auto">
-                                <div class="p-3">
-                                    <form class="form-signin" method="post" action="">
-                                        {% csrf_token %}
-                                        <h1 class="h3 mb-2 font-weight-normal" style="margin-bottom: 20px !important;">
-                                            تسجيل حساب جديد</h1>
-                                        {% for field in formRegister %}
-                                        {{field}}
-                                        {{field.errors}}
-                                        {% endfor %}
-                                        <div class="left">{{accTypeform}}</div>
-                                        <div class="checkbox mb-3">
-                                        </div>
-                                        <button class="btn btn-lg btn-primary btn-block" type="submit">التسجيل</button>
                                     </form>
                                 </div>
                             </div>

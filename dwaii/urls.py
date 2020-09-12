@@ -23,7 +23,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('adminDwaiiDashboard/', admin.site.urls),
     path('', index, name='index'),
     path('aboutus/', aboutUs, name='aboutUs'),
     path('adminDashboard', adminDash, name='adminDash'),
