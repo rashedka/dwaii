@@ -296,7 +296,7 @@ def Registerinfo(request):
     form = ''
     msg = ''
     locForm = locationForm
-    print(userType.accType)
+    AccType = ''
     if userType.accType == 'ph':
         form = PharmacyAccForm()
         msg = 'إذا كان لدى الصيدلية أكثر من فرع الرجاء إضافته لاحقاً'
@@ -324,8 +324,6 @@ def Registerinfo(request):
                     AccType.licenseImg = pharmacyForm.cleaned_data['licenseImg']
                     AccType.licenseNumber = pharmacyForm.cleaned_data['licenseNumber']
                     AccType.save()
-                    return redirect('profile')
-
                 except:
                     return HttpResponse('error')
 
@@ -338,7 +336,7 @@ def Registerinfo(request):
                 AccType.whatsappNumber = form.cleaned_data['whatsappNumber']
                 AccType.facebookPage = form.cleaned_data['facebookPage']
                 AccType.save()
-                return redirect('profile')
+
 
         elif userType.accType == 'no':
             form = CustomerAccForm(request.POST)
@@ -346,7 +344,6 @@ def Registerinfo(request):
                 AccType.username = request.user
                 AccType.phone_number = form.cleaned_data['phone_number']
                 AccType.save()
-                return redirect('profile')
 
         if locForm.is_valid():
             loc = location()
@@ -355,6 +352,7 @@ def Registerinfo(request):
             loc.location = locForm.cleaned_data['location']
             loc.locUrl = locForm.cleaned_data['locUrl']
             loc.save()
+            return redirect('profile')
 
     context = {
         'form': form,
@@ -480,8 +478,8 @@ def add_to_storage(request):
 @allowed_users('admin')
 def adminDash(request):
     medicines = medicine.objects.all()
-    user_infos = user_info.objects.all().count() - 3
-    medicinesc = medicine.objects.all().count()
+    user_infos = pharmacyAcc.objects.all().count()
+    medicinesc = medicine.objects.filter(~Q(img='profile.png')).count()
     quantity = storage.objects.all().count()
     context = {
         'medicine': medicines,

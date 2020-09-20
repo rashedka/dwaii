@@ -10,8 +10,8 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
                   path('search', search, name='search'),
-                  path('searchRequest', searchRequest, name='search'),
-                  path('searchDonate', searchdonate, name='search'),
+                  path('searchRequest', searchRequest, name='searchRequest'),
+                  path('searchDonate', searchdonate, name='searchDonate'),
                   path('sign/', sign, name='sign'),
                   path('signup/', signup, name='signup'),
                   path('', allMedicine, name='allMedicine'),
