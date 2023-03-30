@@ -39,14 +39,14 @@
                                         {{info.location}} <br> {% endfor %}</span></h6>
                                 <h6>وسائل التواصل</h6>
                                 <ul class="unorder-list" style="margin-top: auto;">
-                                    {% if info.phone_number != null%}
-                                    <li><a href="tel:{{info.phone_number}}" style="color:black"><i
+                                    {% if info.username.pharmacyacc.phone_number != null%}
+                                    <li><a href="tel:{{info.username.pharmacyacc.phone_number}}" style="color:black"><i
                                                 style="font-size:34px" class="fa">&#xf095;</i> {{info.phone_number}}</a></li>
-                                    {% endif %} {% if info.whatsappNumber != null%}
-                                    <li><a href="https://wa.me/{{info.whatsappNumber}}" style="color:#006400; margin: 0 10px;"><i style="font-size:34px"
+                                    {% endif %} {% if info.username.pharmacyacc.whatsappNumber != null%}
+                                    <li><a href="https://wa.me/{{info.username.pharmacyacc.whatsappNumber}}" style="color:#006400; margin: 0 10px;"><i style="font-size:34px"
                                                 class="fa">&#xf232;</i></a></li>
-                                    {% endif %} {% if info.facebookPage != null%}
-                                    <li><a href="{{info.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
+                                    {% endif %} {% if info.username.pharmacyacc.facebookPage != null%}
+                                    <li><a href="{{info.username.pharmacyacc.facebookPage}}" style="color:#26e; "><i style="font-size:34px"
                                                 class="fa">&#xf082;</i></a></li>
                                     {% endif %}
 

@@ -7,7 +7,7 @@ class OrderFilter(django_filters.FilterSet):
 
     class Meta:
         model = storage
-        fields = ['price']
+        fields = ['medicine']
 
         labels = {
             'medicine': 'إسم الدواء',

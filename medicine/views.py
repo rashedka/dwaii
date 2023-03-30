@@ -3,11 +3,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, AnonymousUser
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-
 # Create your views here.
+from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.response import Response
+from rest_framework import generics, filters, status
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.decorators import authentication_classes, permission_classes
+
 from medicine.models import user_info, medicine, storage, requestMedi, location, pharmacyAcc, CustomerAcc, \
     organizationAcc
-from . import form
 from django.core.mail import send_mail
 from django.conf import settings
 from .filters import OrderFilter
@@ -16,6 +21,95 @@ from .form import medicineForm, userInfoForm, addToStorageForm, editStorageForm,
     registerForm, locationForm, contactForm, addBranchForm, organizationAccForm, CustomerAccForm, PharmacyAccForm, \
     PharmacyAccEditForm, organizationAccEditForm, medicineEditForm
 from django.db.models import Q
+from .serializers import MedicineList, StorageList, MedicinePharmacyList, UserSerializer
+
+
+# start json
+@api_view(['GET'])
+def apiFlutter(request):
+    api_urls = {
+        'List': '/medicine-list/',
+        'Detail View': '/medicine-detail/<str:pk>/',
+        'Create': '/add-medicine',
+        'Update': '/medicine-update/<str:pk>/',
+        'Delete': '/medicine-delete/<str:pk>/',
+    }
+    return Response(api_urls)
+
+class UserRecordView(APIView):
+    """
+    API View to create or get a list of all the registered
+    users. GET request returns the registered users whereas
+    a POST request allows to create a new user.
+    """
+    permission_classes = [IsAdminUser]
+
+    def get(self, format=None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=ValueError):
+            serializer.create(validated_data=request.data)
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {
+                "error": True,
+                "error_msg": serializer.error_messages,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@authentication_classes([])
+@permission_classes([AllowAny,])
+@api_view(['GET'])
+def medicineList(request):
+    users = medicine.objects.all()
+    serializer = StorageList(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def storageList(request):
+    medi = request.GET['search']
+    users = storage.objects.filter(Q(medicine__generalName__icontains=medi) | Q(
+            medicine__scientificName__icontains=medi))
+    serializer = StorageList(users, many=True)
+    return Response(serializer.data)
+
+@authentication_classes([])
+@permission_classes([])
+@api_view(['GET'])
+def pharmacyList(request):
+    users = pharmacyAcc.objects.all()
+    serializer = StorageList(users, many=True)
+    return Response(serializer.data)
+
+@authentication_classes([])
+@permission_classes([])
+@api_view(['GET'])
+def medicineDetail(request, pk):
+    users = medicine.objects.get(id=pk)
+    serializer = MedicineList(users, many=False)
+    return Response(serializer.data)
+
+@authentication_classes([])
+@permission_classes([])
+class MedicineListView(generics.ListCreateAPIView):
+    search_fields = ['medicine']
+    filter_backends = (filters.SearchFilter, )
+    queryset = medicine.objects.all()
+    serializer_class = StorageList
+
+## end json
 
 
 def base_layout(request):
@@ -31,20 +125,25 @@ def aboutUs(request):
 
 
 def contact(request):
-    conForm = contactForm()
     if request.method == 'POST':
         conForm = contactForm(request.POST)
+        msg = ''
         if conForm.is_valid():
             message = conForm.cleaned_data['message']
             subject = conForm.cleaned_data['subject']
             send_mail(subject,
                       message,
                       settings.EMAIL_HOST_USER,
-                      ['dx20112255@gmail.com',
-                       'support@dwaiisudan.com'],
-                      fail_silently=False)
+                      ['dx20112255@gmail.com'],
+                      fail_silently=False, )
+            msg = 'تم إرسال رسالتك'
+    else:
+        conForm = contactForm()
+        msg = ''
+
     context = {
         'form': conForm,
+        'msg': msg,
     }
     return render(request, 'contact.html', context)
 
@@ -95,7 +194,6 @@ def sign(request):
         'msg1': msg1,
     }
     return render(request, 'sign.html', context)
-
 
 
 @unauthenticated_user
@@ -245,7 +343,6 @@ def editproduct(request, productId):
 def editproductBackend(request, productId):
     if request.user == storage.objects.get(id=productId).username:
         info = storage.objects.get(id=productId)
-        info.price = request.POST['price']
         info.is_Available = request.POST['available']
         info.save()
         return redirect(profile)
@@ -267,6 +364,9 @@ def Editinfo(request):
         ins = get_object_or_404(CustomerAcc, username=request.user)
         form = CustomerAccForm(instance=ins)
 
+    else:
+        form = ''
+
     if request.method == 'POST':
         if userType.accType == 'ph':
             ins = get_object_or_404(pharmacyAcc, username=request.user)
@@ -283,12 +383,15 @@ def Editinfo(request):
             form = CustomerAccForm(request.POST, instance=ins)
             form.save()
             return redirect('profile')
+    else:
+        form = ''
 
     context = {
         'form': form
     }
 
     return render(request, 'edit_information.html', context)
+
 
 @login_required(login_url='/medicine/sign/')
 def Registerinfo(request):
@@ -371,10 +474,11 @@ def logout_backend(request):
 @login_required(login_url='/medicine/sign/')
 def profile(request):
     if user_info.objects.filter(username=request.user).exists():
-        if checkdataBase(request ,pharmacyAcc) or checkdataBase(request ,organizationAcc) or checkdataBase(request ,CustomerAcc):
+        if checkdataBase(request, pharmacyAcc) or checkdataBase(request, organizationAcc) or checkdataBase(request,
+                                                                                                           CustomerAcc):
             user_infos = ''
             user = get_object_or_404(User, username=request.user)
-            userType = get_object_or_404(user_info, username= request.user)
+            userType = get_object_or_404(user_info, username=request.user)
             if userType.accType == 'ph':
                 user_infos = get_object_or_404(pharmacyAcc, username=request.user)
             elif userType.accType == 'or':
@@ -395,13 +499,13 @@ def profile(request):
             return render(request, 'profile.html', context)
         else:
             return redirect('infoRegister')
+    else:
+        return redirect('infoRegister')
 
 
 def checkdataBase(request, tableName):
     existUser = tableName.objects.filter(username=request.user).exists()
     return existUser
-
-
 
 
 def edit_medicine(request, medId):
@@ -449,20 +553,20 @@ def visitorProfile(request, phUrl):
 def add_to_storage(request):
     user = get_object_or_404(user_info, username=request.user)
     medicines = medicine.objects.all()
-    form = addToStorageForm()
+    form = addToStorageForm(request.POST or None)
     msg = ''
     if request.method == 'POST':
-        storageForm = addToStorageForm(request.POST)
-        if storageForm.is_valid():
+        if form.is_valid():
             storages = storage()
+            print(form.cleaned_data.get['medicine'])
+
             storages.username = request.user
-            storages.medicine = storageForm.cleaned_data['medicine']
-            storages.price = storageForm.cleaned_data['price']
+            storages.medicine = form.cleaned_data.get('medicine')
+
             storages.is_Available = True
 
             storages.save()
-            msg = 'تمت إضافة دواء : {}'.format(
-                storageForm.cleaned_data['medicine'])
+            msg = ''
         else:
             msg = 'لم يتم اضافة الدواء'
 

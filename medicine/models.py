@@ -75,11 +75,11 @@ class medCategory(models.Model):
 
 class medicine(models.Model):
     generalName = models.CharField(max_length=100)
-    arabicName = models.CharField(max_length=100, null=True, blank=True)
+    arabicName = models.CharField(max_length=100, blank=True)
     scientificName = models.CharField(max_length=100)
     originCountry = models.CharField(max_length=100)
-    type = models.ForeignKey(medType, on_delete=models.CASCADE, null=True, blank=True)
-    category = models.ForeignKey(medCategory, on_delete=models.CASCADE, null=True, blank=True)
+    type = models.ForeignKey(medType, on_delete=models.CASCADE,)
+    category = models.ForeignKey(medCategory, on_delete=models.CASCADE,)
     manufactureCompanyAr = models.CharField(max_length=50, null=True, blank=True)
     manufactureCompanyEn = models.CharField(max_length=50)
     img = models.ImageField(upload_to="medicine/", default="profile.png")

@@ -135,7 +135,7 @@ class userInfoForm(forms.ModelForm):
 
         widgets = {
             'accType': forms.RadioSelect(
-                attrs={'class': 'col-md-12  ', 'onclick': 'javascript:AccTypeCheck()'}),
+                attrs={'class': 'col-md-12', 'onclick': 'javascript:AccTypeCheck()'}),
         }
 
 

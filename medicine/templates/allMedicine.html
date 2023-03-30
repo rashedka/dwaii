@@ -29,7 +29,7 @@
                                 <h6><a href="{% url 'visitProfile' storage.username.id %}" style="color: #26317d">{{storage.username.pharmacyacc.pharmacyName}}</a>
                                 </h6>
                                 {% else %}
-                                <h6><a href="{% url 'visitProfile' storage.username.id %}">صيدلية
+                                <h6><a href="{% url 'visitProfile' storage.username.id %}" style="color: #26317d">صيدلية
                                         {{storage.username.pharmacyacc.pharmacyName}}</a></h6>
                                 {% endif%} {% elif storage.username.pharmacyAcc.accType == 'or' %}
                                 <h6>
